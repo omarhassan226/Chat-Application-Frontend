@@ -9,20 +9,24 @@ import { LoaderComponent } from './shared/components/loader/loader.component';
 import { CommonModule } from '@angular/common';
 import { AuthRoutingModule } from './features/auth/auth-routing.module';
 import { AuthModule } from './features/auth/auth.module';
+import { AngularToastifyModule, ToastService } from 'angular-toastify';
+import { ChatLayoutComponent } from './features/chat/chat-layout/chat-layout.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    ChatLayoutComponent,
   ],
   imports: [
     CommonModule,
     BrowserModule,
     AppRoutingModule,
     AuthModule,
+    AuthRoutingModule,
     CoreModule,
     SharedModule,
     LoaderComponent,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

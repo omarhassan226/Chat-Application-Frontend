@@ -16,10 +16,10 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   will-change: opacity, transform;
 }
-.login-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 36px rgba(165, 42, 42, 0.3);
-}
+// .login-card:hover {
+//   transform: translateY(-4px);
+//   box-shadow: 0 12px 36px rgba(165, 42, 42, 0.3);
+// }
 
 mat-card-title {
   text-align: center;
@@ -36,12 +36,16 @@ mat-form-field {
 button {
   width: 100%;
   margin-top: 20px;
-  background-color: #e75480;
+  // background-color: #e75480;
   color: #b22222 !important;
   font-size: 1rem;
   padding: 8px 0;
   border-radius: 8px;
   transition: background-color 0.3s ease;
+}
+
+.show-password:hover {
+  color: #b22222 !important;
 }
 
 button:hover:not(:disabled) {

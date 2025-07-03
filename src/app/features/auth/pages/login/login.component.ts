@@ -3,6 +3,7 @@ import { AuthService } from '../../../../core/services/auth/auth.service';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { ToastService } from 'angular-toastify';
 
 @Component({
   selector: 'app-login',
@@ -24,8 +25,9 @@ export class LoginComponent {
   errorMessage: string = '';
   isLoading: boolean = false;
   isLoggedIn: boolean = false;
+    showPassword = false;
 
-  constructor(private authService: AuthService, private router:Router, private fb:FormBuilder){
+  constructor(private authService: AuthService, private router:Router, private fb:FormBuilder, private toastService: ToastService){
     this.loginForm = this.fb.group({
       username: [''],
       password: ['']
@@ -37,12 +39,16 @@ export class LoginComponent {
     this.errorMessage = '';
     this.authService.login(this.loginForm.value).subscribe({
       next: (res:any) => {
+        this.toastService.success('Login successful');
         console.log('Login successful', res);
         localStorage.setItem('token', res.token);
         this.isLoading = false;
+        setTimeout(() => {
         this.router.navigate(['/']);
+        }, 1500);
       },
       error: (error:any) => {
+        this.toastService.error('Login failed');
         console.log(error);
         this.isLoading = false;
       }
@@ -51,6 +57,10 @@ export class LoginComponent {
 
   goToRegister() {
     this.router.navigate(['/auth/register']);
+  }
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
   }
 }
 

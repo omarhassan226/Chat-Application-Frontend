@@ -11,12 +11,15 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 import { RegisterComponent } from './pages/register/register.component';
+import { MatIconModule } from '@angular/material/icon';
+import { ToastService, AngularToastifyModule } from 'angular-toastify';
 
 export const materialModules = [
   MatButtonModule,
   MatInputModule,
   MatFormFieldModule,
-  MatCardModule
+  MatCardModule,
+  MatIconModule
 ]
 
 @NgModule({
@@ -30,7 +33,9 @@ export const materialModules = [
     ReactiveFormsModule,
     LoaderComponent,
     SharedModule,
-    ...materialModules
+    ...materialModules,
+    AngularToastifyModule,
+    
   ]
 })
 export class AuthModule { }
