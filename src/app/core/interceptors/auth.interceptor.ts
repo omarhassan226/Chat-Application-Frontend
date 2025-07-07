@@ -13,30 +13,22 @@ import { AuthService } from '../services/auth/auth.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(private auth: AuthService, private router: Router) { }
 
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  intercept(req: any, next: any) {
     const token = this.auth.getToken();
-
-    let authReq = req;
-
-    if (token) {
-      authReq = req.clone({
-        setHeaders: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-    }
-
+    const authReq = token
+      ? req.clone({ setHeaders: { Authorization: `Bearer ${token}` } })
+      : req;
     return next.handle(authReq).pipe(
-      catchError((error: HttpErrorResponse) => {
-        if (error.status === 401) {
-          // Unauthorized: maybe token expired
+      catchError(err => {
+        if (err.status === 401) {
           this.auth.logout();
           this.router.navigate(['/auth/login']);
         }
-        return throwError(() => error);
+        return throwError(() => err);
       })
     );
   }
+
 }

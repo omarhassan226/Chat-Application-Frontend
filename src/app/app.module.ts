@@ -9,8 +9,10 @@ import { LoaderComponent } from './shared/components/loader/loader.component';
 import { CommonModule } from '@angular/common';
 import { AuthRoutingModule } from './features/auth/auth-routing.module';
 import { AuthModule } from './features/auth/auth.module';
-import { AngularToastifyModule, ToastService } from 'angular-toastify';
 import { ChatLayoutComponent } from './features/chat/chat-layout/chat-layout.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -27,8 +29,16 @@ import { ChatLayoutComponent } from './features/chat/chat-layout/chat-layout.com
     SharedModule,
     LoaderComponent,
     BrowserAnimationsModule,
+    NgbModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -44,7 +44,7 @@ export class LoginComponent {
         localStorage.setItem('token', res.token);
         this.isLoading = false;
         setTimeout(() => {
-        this.router.navigate(['/']);
+        this.router.navigate(['/chat']);
         }, 1500);
       },
       error: (error:any) => {
