@@ -4,16 +4,20 @@ import { CommonModule } from '@angular/common';
 import { ChatRoutingModule } from './chat-routing.module';
 import { ChatComponent } from './chat.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ReactiveFormsModule } from '@angular/forms';
+import { ChatLayoutComponent } from './chat-layout/chat-layout.component';
 
 
 @NgModule({
   declarations: [
-    ChatComponent
+    ChatComponent,
+    ChatLayoutComponent
   ],
   imports: [
     CommonModule,
     ChatRoutingModule,
-    NgbModule
+    NgbModule,
+    ReactiveFormsModule
   ]
 })
 export class ChatModule { }

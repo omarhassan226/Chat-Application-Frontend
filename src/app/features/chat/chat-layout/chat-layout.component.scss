@@ -1,23 +1,96 @@
-#chat3 .form-control {
-border-color: transparent;
+// #chat3 .form-control {
+// border-color: transparent;
+// }
+
+// #chat3 .form-control:focus {
+// border-color: transparent;
+// box-shadow: inset 0px 0px 0px 1px transparent;
+// }
+
+// .badge-dot {
+// border-radius: 50%;
+// height: 10px;
+// width: 10px;
+// margin-left: 2.9rem;
+// margin-top: -.75rem;
+// }
+
+// .user-image{
+//   width: 45px;
+//   height: 45px;
+//   border-radius: 50%;
+//   cursor: pointer;
+// }
+
+
+// #chat3 .form-control {
+//   border-color: transparent;
+//   background-color: #f9f9f9;
+// }
+
+// #chat3 .form-control:focus {
+//   border-color: #ccc;
+//   box-shadow: none;
+// }
+
+// .user-image {
+//   width: 45px;
+//   height: 45px;
+//   border-radius: 50%;
+//   cursor: pointer;
+// }
+
+// .user-item:hover {
+//   background-color: #f0f0f0;
+//   transition: background-color 0.3s;
+// }
+
+// .chat-messages::-webkit-scrollbar {
+//   width: 6px;
+// }
+
+// .chat-messages::-webkit-scrollbar-thumb {
+//   background-color: rgba(0, 0, 0, 0.2);
+//   border-radius: 10px;
+// }
+
+// .dropdown-menu {
+//   font-size: 0.9rem;
+// }
+
+// /* Add to your component styles (chat-layout.component.scss) */
+// .list-group-item:hover {
+//   background-color: #f8f9fa;
+// }
+
+// .chat-body {
+//   background-color: #e5ddd5;
+// }
+
+// input:focus {
+//   box-shadow: none;
+//   border-color: #ced4da;
+// }
+
+/* chat-layout.component.scss */
+html,
+body,
+section,
+.vh-100 {
+  height: 100% !important;
+  margin: 0;
 }
 
-#chat3 .form-control:focus {
-border-color: transparent;
-box-shadow: inset 0px 0px 0px 1px transparent;
-}
+// .list-group-item:hover {
+//   background-color: #f8f9fa;
+// }
 
-.badge-dot {
-border-radius: 50%;
-height: 10px;
-width: 10px;
-margin-left: 2.9rem;
-margin-top: -.75rem;
-}
+// .chat-body {
+//   background-color: #e5ddd5;
+// }
 
-.user-image{
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  cursor: pointer;
-}
+// input:focus,
+// .form-control:focus {
+//   box-shadow: none;
+//   border-color: #ced4da;
+// }

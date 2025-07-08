@@ -10,7 +10,7 @@ import { ToastService } from 'angular-toastify';
   standalone: false,
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
-    animations: [
+  animations: [
     trigger('fadeIn', [
       transition(':enter', [
         style({ opacity: 0, transform: 'translateY(20px)' }),
@@ -25,29 +25,30 @@ export class LoginComponent {
   errorMessage: string = '';
   isLoading: boolean = false;
   isLoggedIn: boolean = false;
-    showPassword = false;
+  showPassword = false;
 
-  constructor(private authService: AuthService, private router:Router, private fb:FormBuilder, private toastService: ToastService){
+  constructor(private authService: AuthService, private router: Router, private fb: FormBuilder, private toastService: ToastService) {
     this.loginForm = this.fb.group({
       username: [''],
       password: ['']
     });
   }
 
-  login(){
+  login() {
     this.isLoading = true;
     this.errorMessage = '';
     this.authService.login(this.loginForm.value).subscribe({
-      next: (res:any) => {
+      next: (res: any) => {
         this.toastService.success('Login successful');
         console.log('Login successful', res);
         localStorage.setItem('token', res.token);
+        localStorage.setItem('userData', JSON.stringify(res.user));
         this.isLoading = false;
         setTimeout(() => {
-        this.router.navigate(['/chat']);
+          this.router.navigate(['/chat']);
         }, 1500);
       },
-      error: (error:any) => {
+      error: (error: any) => {
         this.toastService.error('Login failed');
         console.log(error);
         this.isLoading = false;

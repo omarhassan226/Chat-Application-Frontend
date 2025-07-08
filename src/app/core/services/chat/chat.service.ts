@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -12,11 +12,8 @@ export interface Message { /* _id, senderId, receiverId, ... */ }
 @Injectable({ providedIn: 'root' })
 export class ChatService {
   private base = `${environment.apiUrl}/chat`;
-  private socket: any;
 
-  constructor(private http: HttpClient) {
-    this.socket = io('http://localhost:5000');
-  }
+  constructor(private http: HttpClient) { }
 
   private handleErr(err: any) {
     console.error('API Error:', err);
@@ -30,7 +27,7 @@ export class ChatService {
 
   searchUsers(q: string): Observable<User[]> {
     return this.http.get<User[]>(`${this.base}/users-filter`, { params: new HttpParams().set('q', q) })
-             .pipe(catchError(this.handleErr));
+      .pipe(catchError(this.handleErr));
   }
 
   getMe(): Observable<any> {
@@ -52,7 +49,7 @@ export class ChatService {
   }
 
   // --- Messages ---
-  sendMessage(senderId: string, receiverId?: string, roomId?: string, text?: string)
+  sendMessage(senderId: string, receiverId?: string, text?: string, roomId?: string)
     : Observable<Message> {
     const body: any = { senderId, text };
     if (receiverId) body.receiverId = receiverId;
@@ -60,7 +57,7 @@ export class ChatService {
     return this.http.post<Message>(`${this.base}/send`, body).pipe(catchError(this.handleErr));
   }
 
-  sendFile(file: File, receiverId?: string, roomId?: string, text?: string): Observable<Message> {
+  sendFile(file: File, receiverId?: string, text?: string, roomId?: string): Observable<Message> {
     const fd = new FormData();
     if (file) fd.append('file', file);
     if (receiverId) fd.append('receiverId', receiverId);

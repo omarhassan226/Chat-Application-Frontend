@@ -9,15 +9,14 @@ import { LoaderComponent } from './shared/components/loader/loader.component';
 import { CommonModule } from '@angular/common';
 import { AuthRoutingModule } from './features/auth/auth-routing.module';
 import { AuthModule } from './features/auth/auth.module';
-import { ChatLayoutComponent } from './features/chat/chat-layout/chat-layout.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
+import { ChatModule } from './features/chat/chat.module';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ChatLayoutComponent,
   ],
   imports: [
     CommonModule,
@@ -30,7 +29,8 @@ import { AuthInterceptor } from './core/interceptors/auth.interceptor';
     LoaderComponent,
     BrowserAnimationsModule,
     NgbModule,
-    HttpClientModule
+    HttpClientModule,
+    ChatModule
   ],
   providers: [
     {
