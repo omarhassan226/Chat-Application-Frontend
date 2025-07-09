@@ -1,8 +1,9 @@
-import { AfterViewChecked, AfterViewInit, Component, ElementRef, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, ElementRef, NgZone, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
 import { AuthService } from '../../../core/services/auth/auth.service';
 import { ChatService } from '../../../core/services/chat/chat.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { SocketService } from '../../../core/services/socket/socket.service';
+import { catchError, debounceTime, distinctUntilChanged, exhaustMap, filter, finalize, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
 
 @Component({
   selector: 'app-chat-layout',
@@ -13,7 +14,6 @@ import { SocketService } from '../../../core/services/socket/socket.service';
 export class ChatLayoutComponent implements AfterViewChecked {
 
   @ViewChild('messageContainer') msgContainer!: ElementRef;
-  // @ViewChildren('messageItem') messageItems!: QueryList<any>;
 
   theme: 'light' | 'dark' = 'light';
   users: any;
@@ -22,8 +22,12 @@ export class ChatLayoutComponent implements AfterViewChecked {
   user2Data: any;
   textMessage: any;
   chatForm: any = FormGroup
+  isSearching = false;
+  searchControl = new FormControl('');
+  private destroy$ = new Subject<void>();
+  isTyping!: any
 
-  constructor(private renderer: Renderer2, private authService: AuthService, private chatSerivce: ChatService, private fb: FormBuilder, private socket: SocketService) {
+  constructor(private renderer: Renderer2, private authService: AuthService, private chatService: ChatService, private fb: FormBuilder, private socket: SocketService, private ngZone: NgZone) {
     this.chatForm = fb.group({
       text: ['', Validators.required]
     })
@@ -52,28 +56,44 @@ export class ChatLayoutComponent implements AfterViewChecked {
         console.log('Received private message:', msg);
       });
 
-    this.socket.listen<{ userId: string }>('typing')
-      .subscribe(data => {
-        const user = this.users.find((u: any) => u._id === data.userId);
-        if (user) user.isTyping = true;
+    this.searchControl.valueChanges.pipe(
+      debounceTime(300),
+      filter((term): term is string => typeof term === 'string'),
+      distinctUntilChanged(),
+      tap(() => this.isSearching = true),
+      switchMap(term => {
+        if (term.length > 0) {
+          // If the term is not empty, perform the search
+          return this.chatService.searchUsers(term).pipe(
+            catchError(() => of([])), // Return an empty array in case of error
+            finalize(() => this.isSearching = false)
+          );
+        } else {
+          // If the term is empty, return all users
+          return this.chatService.getAllUsers().pipe(
+            catchError(() => of([])), // Return an empty array in case of error
+            finalize(() => this.isSearching = false)
+          );
+        }
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe(users => {
+      this.users = users;
+    });
+
+    this.socket.listen<{ from: string }>('typing')
+      .subscribe(({ from }) => {
+        if (from === this.user2Data._id) {
+          this.ngZone.run(() => this.isTyping = true);
+        }
       });
 
-
-    this.socket.listen<{ userId: string }>('stopTyping')
-      .subscribe(data => {
-        const user = this.users.find((u: any) => u._id === data.userId);
-        if (user) user.isTyping = false;
+    this.socket.listen<{ from: string }>('stopTyping')
+      .subscribe(({ from }) => {
+        if (from === this.user2Data._id) {
+          this.ngZone.run(() => this.isTyping = false);
+        }
       });
-
-
-    // this.socket.listen<{ userId: string; isOnline: boolean }>('userStatus')
-    //   .subscribe(({ userId, isOnline }) => {
-    //     const user = this.users.find((u: any) => u._id === userId);
-    //     console.log(user);
-
-    //     if (user) user.isOnline = isOnline;
-    //   });
-
   }
 
   toggleTheme() {
@@ -91,11 +111,10 @@ export class ChatLayoutComponent implements AfterViewChecked {
   }
 
   onSettings() {
-    // navigate to settings
   }
 
   getAllUsers() {
-    this.chatSerivce.getAllUsers().subscribe({
+    this.chatService.getAllUsers().subscribe({
       next: (res: any) => {
         this.users = res
         console.log(this.users);
@@ -122,7 +141,7 @@ export class ChatLayoutComponent implements AfterViewChecked {
   getPrivateMessages(user1: any, user2: any) {
     console.log(user2);
 
-    this.chatSerivce.getPrivateMessages(user1, user2).subscribe({
+    this.chatService.getPrivateMessages(user1, user2).subscribe({
       next: (res: any) => {
         this.privateMessages = res
         console.log('Private Messages:', this.privateMessages);
@@ -135,14 +154,11 @@ export class ChatLayoutComponent implements AfterViewChecked {
 
   getUserImage(senderId: string): string {
     const user = this.users.find((u: any) => u._id === senderId);
-    // console.log(user);
-
     return user.image !== null ? user.image : 'public/images/chat-background.jpg';
   }
 
-
   getMe() {
-    this.chatSerivce.getMe().subscribe({
+    this.chatService.getMe().subscribe({
       next: (res: any) => {
         this.user1Data = res.user
         console.log('user1Data', this.user1Data);
@@ -150,40 +166,52 @@ export class ChatLayoutComponent implements AfterViewChecked {
     })
   }
 
-
   sendMessage() {
     const text = this.chatForm.value.text.trim();
     if (!text) return;
 
+    const timestamp = new Date();
+
     const payload = {
       senderId: this.user1Data._id,
       receiverId: this.user2Data._id,
-      text
+      text,
+      timestamp
     };
-
     // Emit via Socket.IO
     this.socket.emit('sendMessage', payload);
-
     // Persist via HTTP to your API
-    this.chatSerivce.sendMessage(payload.senderId, payload.receiverId, text)
+    this.chatService.sendMessage(payload.senderId, payload.receiverId, text, timestamp)
       .subscribe();
 
     this.chatForm.reset();
   }
 
 
+
   //ChatGpt
 
-  // typing indicator
-  typingTimeout: any;
+  typingTimeout?: any;
 
   notifyTyping() {
     clearTimeout(this.typingTimeout);
-    this.socket.emit('userTyping', { userId: this.user1Data._id, to: this.user2Data._id });
+    console.log('EMIT typing ➤ to:', this.user2Data._id);
+    this.socket.emit('typing', {
+      to: this.user2Data._id,
+      userId: this.user1Data._id
+    });
+    this.ngZone.run(() => console.log(this.isTyping)
+    );
     this.typingTimeout = setTimeout(() => {
-      this.socket.emit('userStopTyping', { userId: this.user1Data._id, to: this.user2Data._id });
-    }, 3000);
+      console.log('EMIT stopTyping');
+      this.socket.emit('stopTyping', {
+        to: this.user2Data._id,
+        userId: this.user1Data._id
+      });
+      this.ngZone.run(() => console.log(this.isTyping))
+    }, 1500);
   }
+
 
   // إرسال مرفق
   attachFile(event: Event) {
@@ -200,6 +228,9 @@ export class ChatLayoutComponent implements AfterViewChecked {
     alert('User has been blocked!');
   }
 
-
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
 }

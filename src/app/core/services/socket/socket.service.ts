@@ -32,7 +32,19 @@ export class SocketService {
 
   listen<T>(event: string): Observable<T> {
     return new Observable(observer => {
-      this.socket.on(event, (msg: T) => observer.next(msg));
+      const handler = (msg: T) => observer.next(msg);
+      this.socket.on(event, handler);
+      return () => this.socket.off(event, handler);
     });
   }
+
+  // // Emit typing events
+  // notifyTyping(roomId: string) {
+  //   this.socket.emit('typing', { roomId, userId: this.socket.id });
+  // }
+
+  // // Emit stop typing events
+  // stopTyping(roomId: string) {
+  //   this.socket.emit('stopTyping', { roomId, userId: this.socket.id });
+  // }
 }

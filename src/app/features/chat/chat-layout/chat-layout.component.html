@@ -1,18 +1,25 @@
-<section
-  class="vh-100 d-flex flex-column"
-  [ngStyle]="{ 'background-color': theme === 'light' ? '#CDC4F9' : '#1a1c1e' }"
->
-  <div class="row g-0 flex-grow-1">
+<section class="vh-100 d-flex flex-column">
+  <div class="row g-0 flex-grow-1" style="height: 100%">
     <!-- Sidebar -->
-    <div class="col-12 col-md-4 col-lg-3 border-end d-flex flex-column">
+    <div
+      class="col-12 col-md-4 col-lg-3 border-end d-flex flex-column"
+      style="height: 100%"
+    >
       <div class="p-2 border-bottom">
         <input
-          type="search"
+          type="text"
           class="form-control"
           placeholder="Search users..."
+          [formControl]="searchControl"
         />
       </div>
-      <div class="list-group list-group-flush flex-grow-1 overflow-auto">
+      <div *ngIf="isSearching">
+        <em>Searching...</em>
+      </div>
+      <div
+        *ngIf="!isSearching"
+        class="list-group list-group-flush flex-grow-1 overflow-auto"
+      >
         <div
           *ngFor="let user of users"
           class="list-group-item list-group-item-action d-flex align-items-center"
@@ -21,7 +28,10 @@
         >
           <div class="position-relative me-3">
             <img
-              [src]="user.image || 'assets/images/default-user.jpg'"
+              [src]="
+                user.image ||
+                'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg'
+              "
               class="rounded-circle"
               width="50"
               height="50"
@@ -50,7 +60,10 @@
     </div>
 
     <!-- Chat -->
-    <div class="col-12 col-md-8 col-lg-9 d-flex flex-column">
+    <div
+      class="col-12 col-md-8 col-lg-9 d-flex flex-column"
+      style="height: 100%"
+    >
       <!-- Header w/ User Avatar & Theme Dropdown -->
       <div
         class="d-flex align-items-center justify-content-between p-3 border-bottom"
@@ -134,10 +147,16 @@
       <div
         #messageContainer
         class="flex-grow-1 overflow-auto p-3"
-        style="background-color: #e5ddd5"
+        style="
+          scroll-behavior: smooth;
+          background-image: url('assets/images/Untitled-1.png');
+          background-size: repeated;
+          background-position: center center;
+        "
       >
         <div *ngFor="let message of privateMessages" class="mb-2">
           <div
+            style="display: flex"
             [ngClass]="{
               'd-flex justify-content-start':
                 message.senderId !== user1Data._id,
@@ -150,19 +169,32 @@
               [class.p-2]="true"
               [ngStyle]="{
                 'background-color':
-                  message.senderId === user1Data._id ? '#cdc4f9' : '#ffffff',
-                color:
-                  message.senderId === user1Data._id ? '#ffffff' : '#000000'
+                  message.senderId === user1Data._id && theme === 'dark'
+                    ? '#177d37'
+                    : message.senderId === user1Data._id && theme === 'light'
+                    ? 'rgb(78 237 128)'
+                    : message.senderId !== user1Data._id && theme === 'dark'
+                    ? '#000000'
+                    : message.senderId !== user1Data._id && theme === 'light'
+                    ? '#ffffff'
+                    : '#ffffff',
+                color: theme === 'dark' ? '#FFFFFF' : 'rgba(33, 37, 41, 0.75)',
               }"
               style="max-width: 70%"
             >
-              <div>{{ message.text }}</div>
+              <div style="text-wrap: auto; word-break: break-word">
+                {{ message.text }}
+              </div>
               <div class="text-muted small text-end">
                 {{ message.timestamp | date : "shortTime" }}
               </div>
             </div>
           </div>
         </div>
+      </div>
+
+      <div class="text-muted small" *ngIf="isTyping">
+        {{ user2Data.username }} is typing...
       </div>
 
       <!-- Input -->
@@ -183,7 +215,10 @@
           placeholder="Type a message"
           formControlName="text"
           (keydown)="notifyTyping()"
+          (keyup.enter)="sendMessage()"
+          (keydown.enter)="$event.preventDefault()"
         />
+
         <button class="btn" type="button" (click)="sendMessage()">
           <i class="fas fa-paper-plane"></i>
         </button>

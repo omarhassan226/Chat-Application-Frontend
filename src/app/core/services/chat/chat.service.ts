@@ -1,7 +1,7 @@
 import { Injectable, OnInit } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, timestamp } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { io, Socket } from 'socket.io-client';
 
@@ -49,9 +49,9 @@ export class ChatService {
   }
 
   // --- Messages ---
-  sendMessage(senderId: string, receiverId?: string, text?: string, roomId?: string)
+  sendMessage(senderId: string, receiverId?: string, text?: string, timStamp?: any, roomId?: string)
     : Observable<Message> {
-    const body: any = { senderId, text };
+    const body: any = { senderId, text, timestamp };
     if (receiverId) body.receiverId = receiverId;
     if (roomId) body.roomId = roomId;
     return this.http.post<Message>(`${this.base}/send`, body).pipe(catchError(this.handleErr));
