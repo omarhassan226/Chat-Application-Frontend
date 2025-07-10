@@ -152,6 +152,7 @@
           background-image: url('assets/images/Untitled-1.png');
           background-size: repeated;
           background-position: center center;
+          position: relative;
         "
       >
         <div *ngFor="let message of privateMessages" class="mb-2">
@@ -185,30 +186,82 @@
               <div style="text-wrap: auto; word-break: break-word">
                 {{ message.text }}
               </div>
+              <ng-container *ngIf="message.fileUrl">
+                <div class="mt-2">
+                  <a
+                    [href]="message.fileUrl"
+                    target="_blank"
+                    class="d-inline-block text-decoration-none"
+                  >
+                    <img
+                      *ngIf="message.fileType?.startsWith('image/')"
+                      [src]="message.fileUrl"
+                      class="img-thumbnail"
+                      style="max-width: 200px; max-height: 200px"
+                    />
+                    <div
+                      *ngIf="!message.fileType?.startsWith('image/')"
+                      class="d-flex align-items-center"
+                    >
+                      <i class="fas fa-file me-2 fs-4"></i>
+                      <span class="text-break">{{
+                        extractFileNameWithoutNumbers(message.fileUrl)
+                      }}</span>
+                    </div>
+                  </a>
+                </div>
+              </ng-container>
               <div class="text-muted small text-end">
                 {{ message.timestamp | date : "shortTime" }}
               </div>
             </div>
           </div>
         </div>
-      </div>
-
-      <div class="text-muted small" *ngIf="isTyping">
-        {{ user2Data.username }} is typing...
+        <div
+          *ngIf="isTyping"
+          class="typing-bubble"
+          [ngStyle]="{
+            color: theme === 'dark' ? '#FFFFFF' : 'rgba(33, 37, 41, 0.75)',
+            'background-color':
+              theme === 'dark' ? 'rgba(33, 37, 41, 0.75)' : '#ebe8e8'
+          }"
+        >
+          <div>{{ user2Data.username }} is typing</div>
+          <div class="typing-dots"><span></span><span></span><span></span></div>
+        </div>
+        <!-- Emoji picker -->
       </div>
 
       <!-- Input -->
       <form
         [formGroup]="chatForm"
         class="border-top p-3 d-flex align-items-center"
+        style="position: relative"
       >
-        <input type="file" (change)="attachFile($event)" hidden #fileInput />
+        <ch-emoji-picker
+          *ngIf="showPicker"
+          [width]="300"
+          [height]="350"
+          [autofocus]="false"
+          [skintoneSetting]="skintoneSetting()"
+          (onEmojiSelected)="handleEmojiSelected($event)"
+          (onGlobalSkintoneChanged)="handleGlobalSkintoneChanged($event)"
+          style="position: absolute; bottom: 75px; z-index: 1000"
+        ></ch-emoji-picker>
+        <input type="file" (change)="onFileSelect($event)" hidden #fileInput />
         <i
           class="fas fa-paperclip text-muted me-3"
           style="cursor: pointer"
           (click)="fileInput.click()"
         ></i>
-        <i class="fas fa-smile text-muted me-3" style="cursor: pointer"></i>
+
+        <!-- Smile button toggles picker -->
+        <i
+          class="fas fa-smile text-muted me-3"
+          (click)="showEmoji()"
+          style="cursor: pointer"
+        ></i>
+
         <input
           type="text"
           class="form-control me-2"

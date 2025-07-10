@@ -13,6 +13,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { ChatModule } from './features/chat/chat.module';
+import { ReactiveFormsModule } from '@angular/forms';
+import { provideEmojiPicker } from '@chit-chat/ngx-emoji-picker/lib/providers';
+import { EmojiPickerModule } from '@chit-chat/ngx-emoji-picker/lib/providers';
 
 @NgModule({
   declarations: [
@@ -30,14 +33,17 @@ import { ChatModule } from './features/chat/chat.module';
     BrowserAnimationsModule,
     NgbModule,
     HttpClientModule,
-    ChatModule
+    ChatModule,
+    ReactiveFormsModule,
+    EmojiPickerModule
   ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true
-    }
+    },
+    provideEmojiPicker()
   ],
   bootstrap: [AppComponent]
 })

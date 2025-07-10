@@ -4,12 +4,24 @@ import { ChatService } from '../../../core/services/chat/chat.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { SocketService } from '../../../core/services/socket/socket.service';
 import { catchError, debounceTime, distinctUntilChanged, exhaustMap, filter, finalize, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import { animate, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-chat-layout',
   standalone: false,
   templateUrl: './chat-layout.component.html',
-  styleUrl: './chat-layout.component.scss'
+  styleUrl: './chat-layout.component.scss',
+  animations: [
+    trigger('fadeInOut', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('300ms ease-in', style({ opacity: 1 })),
+      ]),
+      transition(':leave', [
+        animate('300ms ease-out', style({ opacity: 0 })),
+      ]),
+    ]),
+  ],
 })
 export class ChatLayoutComponent implements AfterViewChecked {
 
@@ -26,6 +38,8 @@ export class ChatLayoutComponent implements AfterViewChecked {
   searchControl = new FormControl('');
   private destroy$ = new Subject<void>();
   isTyping!: any
+  showPicker: any = false
+  selectedFile!: any
 
   constructor(private renderer: Renderer2, private authService: AuthService, private chatService: ChatService, private fb: FormBuilder, private socket: SocketService, private ngZone: NgZone) {
     this.chatForm = fb.group({
@@ -166,31 +180,96 @@ export class ChatLayoutComponent implements AfterViewChecked {
     })
   }
 
-  sendMessage() {
-    const text = this.chatForm.value.text.trim();
-    if (!text) return;
+  // sendMessage() {
+  //   const text = this.chatForm.value.text.trim();
+  //   if (!text) return;
 
-    const timestamp = new Date();
+  //   const timestamp = new Date();
+  //   const file = this.selectedFile;
 
-    const payload = {
-      senderId: this.user1Data._id,
-      receiverId: this.user2Data._id,
-      text,
-      timestamp
-    };
-    // Emit via Socket.IO
-    this.socket.emit('sendMessage', payload);
-    // Persist via HTTP to your API
-    this.chatService.sendMessage(payload.senderId, payload.receiverId, text, timestamp)
-      .subscribe();
+  //   const payload = {
+  //     senderId: this.user1Data._id,
+  //     receiverId: this.user2Data._id,
+  //     text,
+  //     timestamp,
+  //     fileUrl: file,
+  //     // mimetype: file.type
+  //   };
+  //   // Emit via Socket.IO
+  //   this.socket.emit('uploadFile', payload);
+  //   // Persist via HTTP to your API
+  //   this.chatService.sendMessage(payload.senderId, payload.receiverId, text, file, timestamp)
+  //     .subscribe({
+  //       next: () => {
+  //         console.log(file);
 
-    this.chatForm.reset();
-  }
+  //         this.showPicker = false;
+  //       }
+  //     });
+
+  //   this.chatForm.reset();
+  // }
 
 
 
   //ChatGpt
 
+  sendMessage() {
+    const text = this.chatForm.value.text || '';
+    const file = this.selectedFile;
+
+    // If both text and file are empty, do nothing
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const payload = {
+          metadata: {
+            senderId: this.user1Data._id,
+            receiverId: this.user2Data._id,
+            text,
+            filename: file.name,
+            mimetype: file.type
+          },
+          buffer: reader.result as ArrayBuffer
+        };
+        console.log('📤 Emitting uploadMessage:', payload);
+        this.socket.emit('uploadMessage', payload);
+        this.resetForm();
+        console.log(this.privateMessages);
+
+      };
+      this.showPicker = false
+      reader.readAsArrayBuffer(file);
+    } else {
+      const payload = {
+        senderId: this.user1Data._id,
+        receiverId: this.user2Data._id,
+        text,
+        timestamp: new Date()
+      };
+      console.log('📤 Emitting sendMessage:', payload);
+      this.socket.emit('sendMessage', payload);
+      this.resetForm();
+      this.showPicker = false
+    }
+  }
+
+  extractFileNameWithoutNumbers(fileUrl: string): string {
+    if (!fileUrl) return '';
+    try {
+      const url = new URL(fileUrl);
+      const fileName = url.pathname.split('/').pop() || '';
+      return fileName.replace(/\d+/g, '').replace(/[-_]+/g, ' ').trim();
+    } catch {
+      return fileUrl.split('/').pop()?.replace(/\d+/g, '').replace(/[-_]+/g, ' ').trim() || '';
+    }
+  }
+
+  resetForm() {
+    this.chatForm.reset();
+    this.selectedFile = undefined;
+  }
   typingTimeout?: any;
 
   notifyTyping() {
@@ -209,23 +288,61 @@ export class ChatLayoutComponent implements AfterViewChecked {
         userId: this.user1Data._id
       });
       this.ngZone.run(() => console.log(this.isTyping))
-    }, 1500);
-  }
-
-
-  // إرسال مرفق
-  attachFile(event: Event) {
-    const file = (event.target as HTMLInputElement).files?.[0];
-    if (file) {
-      // يمكنك استخدام FormData لإرسال الملف للسيرفر
-      console.log('File attached:', file);
-    }
+    }, 2000);
   }
 
   // بلوك
   blockUser(userId: string) {
     this.socket.emit('blockUser', { userId, by: this.user1Data._id });
     alert('User has been blocked!');
+  }
+
+  skintoneSetting(): 'both' | 'global' | 'individual' | 'none' {
+    return 'both';
+  }
+
+  handleEmojiSelected(event: any) {
+    const emoji = event.emoji;
+    console.log(emoji);
+
+    const currentText = this.chatForm.get('text')?.value || '';
+    console.log(currentText);
+
+    this.chatForm.patchValue({ text: currentText + emoji.value });
+    // this.showPicker = false;
+  }
+
+  handleGlobalSkintoneChanged(event: any) {
+    console.log('Global skin tone changed:', event.skinTone);
+    // save user preference or update UI accordingly
+  }
+
+  showEmoji() {
+    this.showPicker = !this.showPicker
+    console.log(this.showEmoji);
+
+  }
+
+  storageConfig() {
+    return {
+      suggestionEmojis: {
+        storage: 'localstorage',
+        allowAutoSave: true
+      },
+      globalSkintone: {
+        storage: 'localstorage',
+        allowAutoSave: true
+      },
+      individualSkintones: {
+        storage: 'localstorage',
+        allowAutoSave: true
+      }
+    };
+  }
+
+  onFileSelect(e: Event) {
+    this.selectedFile = (e.target as HTMLInputElement).files?.[0];
+    console.log(this.selectedFile);
   }
 
   ngOnDestroy() {

@@ -7,31 +7,80 @@
       <form [formGroup]="loginForm" (ngSubmit)="login()">
         <mat-form-field appearance="fill">
           <mat-label>Username</mat-label>
-          <input matInput formControlName="username" placeholder="Enter your username">
-          <mat-error *ngIf="loginForm.get('username')?.hasError('required')">Username is required</mat-error>
-          <mat-error *ngIf="loginForm.get('username')?.hasError('username')">Please enter a valid username</mat-error>
+          <input
+            matInput
+            formControlName="username"
+            placeholder="Enter your username"
+          />
+          <mat-error *ngIf="loginForm.get('username')?.hasError('required')"
+            >Username is required</mat-error
+          >
+          <mat-error *ngIf="loginForm.get('username')?.hasError('username')"
+            >Please enter a valid username</mat-error
+          >
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Password</mat-label>
-          <input matInput [type]="showPassword ? 'text' : 'password'" formControlName="password"
-            placeholder="Enter your password">
-          <button  matSuffix type="button" (click)="togglePasswordVisibility()" class="show-password" style="margin: 0 !important; background-color: transparent; border: none; padding-right:16px !important; cursor: pointer; color: #b22222 !important"
-            [attr.aria-label]="'Toggle password visibility'" [attr.aria-pressed]="showPassword">
-            <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          <input
+            matInput
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            placeholder="Enter your password"
+          />
+          <button
+            matSuffix
+            type="button"
+            (click)="togglePasswordVisibility()"
+            class="show-password"
+            style="
+              margin: 0 !important;
+              background-color: transparent;
+              border: none;
+              padding-right: 16px !important;
+              cursor: pointer;
+              color: #b22222 !important;
+            "
+            [attr.aria-label]="'Toggle password visibility'"
+            [attr.aria-pressed]="showPassword"
+          >
+            <mat-icon>{{
+              showPassword ? "visibility_off" : "visibility"
+            }}</mat-icon>
           </button>
-          <mat-error *ngIf="loginForm.get('password')?.hasError('required')">Password is required</mat-error>
-          <mat-error *ngIf="loginForm.get('password')?.hasError('minlength')">Password must be at least 8 characters
-            long</mat-error>
+          <mat-error *ngIf="loginForm.get('password')?.hasError('required')"
+            >Password is required</mat-error
+          >
+          <mat-error *ngIf="loginForm.get('password')?.hasError('minlength')"
+            >Password must be at least 8 characters long</mat-error
+          >
         </mat-form-field>
 
-        <button mat-raised-button class="login-button" color="primary" type="submit"
-          [disabled]="loginForm.invalid">Login</button>
-        <button mat-raised-button class="login-button" color="primary" type="button" (click)="goToRegister()">Don't have
-          an account? Signup</button>
+        <button
+          mat-raised-button
+          class="login-button"
+          color="primary"
+          type="submit"
+          [disabled]="loginForm.invalid"
+        >
+          Login
+        </button>
+        <button
+          mat-raised-button
+          class="login-button"
+          color="primary"
+          type="button"
+          (click)="goToRegister()"
+        >
+          Don't have an account? Signup
+        </button>
       </form>
     </mat-card-content>
   </mat-card>
 </div>
 
-<lib-toastify-toast-container [position]="'top-right'"></lib-toastify-toast-container>
+<lib-toastify-toast-container
+  [position]="'top-right'"
+></lib-toastify-toast-container>
+
+<app-loader></app-loader>
