@@ -24,6 +24,8 @@ export class SocketService {
     this.socket = io('http://localhost:5000', {
       auth: { userId }
     });
+    console.log(userId);
+
   }
 
   emit(event: string, data?: any) {

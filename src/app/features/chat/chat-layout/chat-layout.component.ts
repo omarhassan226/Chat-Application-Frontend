@@ -26,6 +26,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
 export class ChatLayoutComponent implements AfterViewChecked {
 
   @ViewChild('messageContainer') msgContainer!: ElementRef;
+  @ViewChildren('msgElem') messageElems!: QueryList<ElementRef>;
 
   theme: 'light' | 'dark' = 'light';
   users: any;
@@ -40,6 +41,7 @@ export class ChatLayoutComponent implements AfterViewChecked {
   isTyping!: any
   showPicker: any = false
   selectedFile!: any
+  private messageObserver!: IntersectionObserver;
 
   constructor(private renderer: Renderer2, private authService: AuthService, private chatService: ChatService, private fb: FormBuilder, private socket: SocketService, private ngZone: NgZone) {
     this.chatForm = fb.group({
@@ -56,6 +58,12 @@ export class ChatLayoutComponent implements AfterViewChecked {
       const el = this.msgContainer.nativeElement;
       el.scrollTop = el.scrollHeight;
     } catch { }
+  }
+
+  ngAfterViewInit() {
+    this.messageElems.changes.subscribe((qlist: QueryList<ElementRef>) => {
+      qlist.forEach(el => this.messageObserver.observe(el.nativeElement));
+    });
   }
 
   ngOnInit() {
@@ -106,6 +114,31 @@ export class ChatLayoutComponent implements AfterViewChecked {
       .subscribe(({ from }) => {
         if (from === this.user2Data._id) {
           this.ngZone.run(() => this.isTyping = false);
+        }
+      });
+
+    this.messageObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const msgId = entry.target.getAttribute('data-msg-id');
+          const msg = this.privateMessages.find((m: any) => m._id === msgId);
+          if (msg && !msg.isRead && msg.senderId === this.user2Data._id) {
+            this.socket.emit('messageRead', {
+              messageId: msg._id,
+              readerId: this.user1Data._id
+            });
+          }
+          this.messageObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    this.socket.listen<any>('messageSeen')
+      .subscribe(({ messageId, seenBy, readAt }) => {
+        const msg = this.privateMessages.find((m: any) => m._id === messageId);
+        if (msg) {
+          msg.isRead = true;
+          msg.readAt = new Date(readAt);
         }
       });
   }
@@ -180,38 +213,6 @@ export class ChatLayoutComponent implements AfterViewChecked {
     })
   }
 
-  // sendMessage() {
-  //   const text = this.chatForm.value.text.trim();
-  //   if (!text) return;
-
-  //   const timestamp = new Date();
-  //   const file = this.selectedFile;
-
-  //   const payload = {
-  //     senderId: this.user1Data._id,
-  //     receiverId: this.user2Data._id,
-  //     text,
-  //     timestamp,
-  //     fileUrl: file,
-  //     // mimetype: file.type
-  //   };
-  //   // Emit via Socket.IO
-  //   this.socket.emit('uploadFile', payload);
-  //   // Persist via HTTP to your API
-  //   this.chatService.sendMessage(payload.senderId, payload.receiverId, text, file, timestamp)
-  //     .subscribe({
-  //       next: () => {
-  //         console.log(file);
-
-  //         this.showPicker = false;
-  //       }
-  //     });
-
-  //   this.chatForm.reset();
-  // }
-
-
-
   //ChatGpt
 
   sendMessage() {
@@ -236,10 +237,15 @@ export class ChatLayoutComponent implements AfterViewChecked {
         console.log('📤 Emitting uploadMessage:', payload);
         this.socket.emit('uploadMessage', payload);
         this.resetForm();
+        this.selectedFile = null
         console.log(this.privateMessages);
 
       };
       this.showPicker = false
+      this.socket.emit('stopTyping', {
+        to: this.user2Data._id,
+        userId: this.user1Data._id
+      });
       reader.readAsArrayBuffer(file);
     } else {
       const payload = {
@@ -252,6 +258,10 @@ export class ChatLayoutComponent implements AfterViewChecked {
       this.socket.emit('sendMessage', payload);
       this.resetForm();
       this.showPicker = false
+      this.socket.emit('stopTyping', {
+        to: this.user2Data._id,
+        userId: this.user1Data._id
+      });
     }
   }
 

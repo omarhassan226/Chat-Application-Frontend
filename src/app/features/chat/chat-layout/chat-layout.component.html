@@ -157,6 +157,8 @@
       >
         <div *ngFor="let message of privateMessages" class="mb-2">
           <div
+            #msgElem
+            [attr.data-msg-id]="message._id"
             style="display: flex"
             [ngClass]="{
               'd-flex justify-content-start':
@@ -213,8 +215,20 @@
               </ng-container>
               <div class="text-muted small text-end">
                 {{ message.timestamp | date : "shortTime" }}
+
+                <span *ngIf="message.senderId === user1Data._id">
+                  <i
+                    *ngIf="message.isRead"
+                    class="fas fa-check-double text-primary"
+                  ></i>
+                  <i
+                    *ngIf="!message.isRead"
+                    class="fas fa-check text-secondary"
+                  ></i>
+                </span>
               </div>
             </div>
+            <div class="text-muted small text-end"></div>
           </div>
         </div>
         <div
