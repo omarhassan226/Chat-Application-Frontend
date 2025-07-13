@@ -28,9 +28,9 @@ export class SocketService {
 
   }
 
-  emit(event: string, data?: any) {
-    this.socket.emit(event, data);
-  }
+  // emit(event: string, data?: any) {
+  //   this.socket.emit(event, data);
+  // }
 
   listen<T>(event: string): Observable<T> {
     return new Observable(observer => {
@@ -39,6 +39,20 @@ export class SocketService {
       return () => this.socket.off(event, handler);
     });
   }
+
+
+  emit(event: string, data?: any, ack?: Function) {
+    this.socket.emit(event, data, ack);
+  }
+
+  joinRoom(roomId: string) {
+    this.emit('joinRoom', { roomId });
+  }
+
+  listenRoom<T>(event: string): Observable<T> {
+    return this.listen<T>(event);
+  }
+
 
   // // Emit typing events
   // notifyTyping(roomId: string) {

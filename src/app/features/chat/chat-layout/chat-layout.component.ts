@@ -42,6 +42,7 @@ export class ChatLayoutComponent implements AfterViewChecked {
   showPicker: any = false
   selectedFile!: any
   private messageObserver!: IntersectionObserver;
+  currentRoomId!: string;
 
   constructor(private renderer: Renderer2, private authService: AuthService, private chatService: ChatService, private fb: FormBuilder, private socket: SocketService, private ngZone: NgZone) {
     this.chatForm = fb.group({
@@ -141,6 +142,13 @@ export class ChatLayoutComponent implements AfterViewChecked {
           msg.readAt = new Date(readAt);
         }
       });
+
+    this.socket.listen<any>('receiveMessage').subscribe(msg => {
+      if (msg.roomId === this.currentRoomId) {
+        this.privateMessages.push(msg);
+      }
+    });
+
   }
 
   toggleTheme() {
@@ -169,29 +177,34 @@ export class ChatLayoutComponent implements AfterViewChecked {
     })
   }
 
-  getUser(id: any) {
-    const user = this.users.find((user: any) => user._id === id || user.id === id);
-    this.user2Data = user
-    console.log(this.user1Data);
-    console.log(this.user2Data);
 
-    this.getMe();
 
-    this.getPrivateMessages(this.user1Data._id, this.user2Data._id)
-    if (user) {
-      console.log('Selected user:', user);
-    } else {
-      console.log('User not found');
-    }
-  }
 
-  getPrivateMessages(user1: any, user2: any) {
-    console.log(user2);
 
-    this.chatService.getPrivateMessages(user1, user2).subscribe({
+  // getUser(id: any) {
+  //   const user = this.users.find((user: any) => user._id === id || user.id === id);
+  //   this.user2Data = user
+  //   console.log(this.user1Data);
+  //   console.log(this.user2Data);
+
+  //   this.getMe();
+
+  //   this.getPrivateMessages(this.user1Data._id, this.user2Data._id)
+  //   if (user) {
+  //     console.log('Selected user:', user);
+  //   } else {
+  //     console.log('User not found');
+  //   }
+  // }
+
+  getPrivateMessages() {
+    console.log(this.user2Data._id);
+
+    this.chatService.getPrivateMessages(this.user1Data._id, this.user2Data._id).subscribe({
       next: (res: any) => {
         this.privateMessages = res
         console.log('Private Messages:', this.privateMessages);
+        this.socket.emit('joinRoom', { roomId: this.currentRoomId });
       },
       error: (err: any) => {
         console.log(err);
@@ -215,55 +228,55 @@ export class ChatLayoutComponent implements AfterViewChecked {
 
   //ChatGpt
 
-  sendMessage() {
-    const text = this.chatForm.value.text || '';
-    const file = this.selectedFile;
+  // sendMessage() {
+  //   const text = this.chatForm.value.text || '';
+  //   const file = this.selectedFile;
 
-    // If both text and file are empty, do nothing
+  //   // If both text and file are empty, do nothing
 
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        const payload = {
-          metadata: {
-            senderId: this.user1Data._id,
-            receiverId: this.user2Data._id,
-            text,
-            filename: file.name,
-            mimetype: file.type
-          },
-          buffer: reader.result as ArrayBuffer
-        };
-        console.log('📤 Emitting uploadMessage:', payload);
-        this.socket.emit('uploadMessage', payload);
-        this.resetForm();
-        this.selectedFile = null
-        console.log(this.privateMessages);
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.onload = () => {
+  //       const payload = {
+  //         metadata: {
+  //           senderId: this.user1Data._id,
+  //           receiverId: this.user2Data._id,
+  //           text,
+  //           filename: file.name,
+  //           mimetype: file.type
+  //         },
+  //         buffer: reader.result as ArrayBuffer
+  //       };
+  //       console.log('📤 Emitting uploadMessage:', payload);
+  //       this.socket.emit('uploadMessage', payload);
+  //       this.resetForm();
+  //       this.selectedFile = null
+  //       console.log(this.privateMessages);
 
-      };
-      this.showPicker = false
-      this.socket.emit('stopTyping', {
-        to: this.user2Data._id,
-        userId: this.user1Data._id
-      });
-      reader.readAsArrayBuffer(file);
-    } else {
-      const payload = {
-        senderId: this.user1Data._id,
-        receiverId: this.user2Data._id,
-        text,
-        timestamp: new Date()
-      };
-      console.log('📤 Emitting sendMessage:', payload);
-      this.socket.emit('sendMessage', payload);
-      this.resetForm();
-      this.showPicker = false
-      this.socket.emit('stopTyping', {
-        to: this.user2Data._id,
-        userId: this.user1Data._id
-      });
-    }
-  }
+  //     };
+  //     this.showPicker = false
+  //     this.socket.emit('stopTyping', {
+  //       to: this.user2Data._id,
+  //       userId: this.user1Data._id
+  //     });
+  //     reader.readAsArrayBuffer(file);
+  //   } else {
+  //     const payload = {
+  //       senderId: this.user1Data._id,
+  //       receiverId: this.user2Data._id,
+  //       text,
+  //       timestamp: new Date()
+  //     };
+  //     console.log('📤 Emitting sendMessage:', payload);
+  //     this.socket.emit('sendMessage', payload);
+  //     this.resetForm();
+  //     this.showPicker = false
+  //     this.socket.emit('stopTyping', {
+  //       to: this.user2Data._id,
+  //       userId: this.user1Data._id
+  //     });
+  //   }
+  // }
 
   extractFileNameWithoutNumbers(fileUrl: string): string {
     if (!fileUrl) return '';
@@ -359,5 +372,59 @@ export class ChatLayoutComponent implements AfterViewChecked {
     this.destroy$.next();
     this.destroy$.complete();
   }
+
+
+  getUser(id: string) {
+    const user = this.users.find((u: any) => u._id === id);
+    this.user2Data = user!;
+    this.chatService.createOrGetRoom([this.user1Data._id, id])
+      .subscribe((res: any) => {
+        console.log(res);
+
+        this.currentRoomId = res.roomId;
+        this.socket.joinRoom(this.currentRoomId);
+        this.loadRoomMessages();
+      });
+  }
+
+  loadRoomMessages() {
+    this.chatService.getRoomMessages(this.currentRoomId)
+      .subscribe(msgs => this.privateMessages = msgs);
+  }
+
+  sendMessage() {
+    const text = this.chatForm.value.text;
+    const file = this.selectedFile;
+    if (!text && !file) return;
+
+    const payload: any = {
+      senderId: this.user1Data._id,
+      roomId: this.currentRoomId,
+      text,
+      timestamp: new Date(),
+    };
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        payload.metadata = {
+          senderId: this.user1Data._id,
+          roomId: this.currentRoomId,
+          filename: file.name,
+          mimetype: file.type,
+          text,
+          timestamp: new Date()
+        };
+        payload.buffer = reader.result as ArrayBuffer;
+        this.socket.emit('uploadMessage', payload);
+      };
+      reader.readAsArrayBuffer(file);
+    } else {
+      this.socket.emit('sendMessage', payload);
+    }
+
+    this.resetForm();
+  }
+
 
 }

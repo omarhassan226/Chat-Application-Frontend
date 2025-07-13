@@ -43,10 +43,10 @@ export class ChatService {
   }
 
   // --- Rooms ---
-  createRoom(name: string, members: string[]): Observable<ChatRoom> {
-    return this.http.post<ChatRoom>(`${this.base}/create-room`, { name, members })
-      .pipe(catchError(this.handleErr));
-  }
+  // createRoom(name: string, memberIds: string[]): Observable<ChatRoom> {
+  //   return this.http.post<ChatRoom>(`${this.base}/create-room`, { name, memberIds })
+  //     .pipe(catchError(this.handleErr));
+  // }
 
   // --- Messages ---
   sendMessage(senderId: string, receiverId?: string, text?: string, file?: any, timStamp?: any, roomId?: string)
@@ -87,4 +87,11 @@ export class ChatService {
   getRecentGroup(): Observable<Message[]> {
     return this.http.get<Message[]>(`${this.base}/group/recent`).pipe(catchError(this.handleErr));
   }
+
+  createOrGetRoom(memberIds: string[]): Observable<{ roomId: string }> {
+    return this.http
+      .post<{ roomId: string }>(`${this.base}/create-room`, { memberIds })
+      .pipe(catchError(this.handleErr));
+  }
+
 }
