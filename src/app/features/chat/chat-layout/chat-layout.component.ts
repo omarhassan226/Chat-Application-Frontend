@@ -43,6 +43,8 @@ export class ChatLayoutComponent implements AfterViewChecked {
   selectedFile!: any
   private messageObserver!: IntersectionObserver;
   currentRoomId!: string;
+  typingUsers = new Set<string>();
+
 
   constructor(private renderer: Renderer2, private authService: AuthService, private chatService: ChatService, private fb: FormBuilder, private socket: SocketService, private ngZone: NgZone) {
     this.chatForm = fb.group({
@@ -108,6 +110,8 @@ export class ChatLayoutComponent implements AfterViewChecked {
       .subscribe(({ from }) => {
         if (from === this.user2Data._id) {
           this.ngZone.run(() => this.isTyping = true);
+          console.log(this.isTyping);
+          this.typingUsers.add(from);
         }
       });
 
@@ -115,6 +119,8 @@ export class ChatLayoutComponent implements AfterViewChecked {
       .subscribe(({ from }) => {
         if (from === this.user2Data._id) {
           this.ngZone.run(() => this.isTyping = false);
+          console.log(this.isTyping);
+          this.typingUsers.delete(from);
         }
       });
 
@@ -302,15 +308,14 @@ export class ChatLayoutComponent implements AfterViewChecked {
       to: this.user2Data._id,
       userId: this.user1Data._id
     });
-    this.ngZone.run(() => console.log(this.isTyping)
-    );
+    // this.ngZone.run(() => console.log(this.isTyping)
+    // );
     this.typingTimeout = setTimeout(() => {
       console.log('EMIT stopTyping');
       this.socket.emit('stopTyping', {
         to: this.user2Data._id,
         userId: this.user1Data._id
       });
-      this.ngZone.run(() => console.log(this.isTyping))
     }, 2000);
   }
 
@@ -403,6 +408,10 @@ export class ChatLayoutComponent implements AfterViewChecked {
       text,
       timestamp: new Date(),
     };
+    this.socket.emit('stopTyping', {
+      to: this.user2Data._id,
+      userId: this.user1Data._id
+    });
 
     if (file) {
       const reader = new FileReader();
@@ -417,10 +426,18 @@ export class ChatLayoutComponent implements AfterViewChecked {
         };
         payload.buffer = reader.result as ArrayBuffer;
         this.socket.emit('uploadMessage', payload);
+        this.socket.emit('stopTyping', {
+          to: this.user2Data._id,
+          userId: this.user1Data._id
+        });
       };
       reader.readAsArrayBuffer(file);
     } else {
       this.socket.emit('sendMessage', payload);
+      this.socket.emit('stopTyping', {
+        to: this.user2Data._id,
+        userId: this.user1Data._id
+      });
     }
 
     this.resetForm();
