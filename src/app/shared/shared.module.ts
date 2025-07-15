@@ -1,12 +1,12 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 
-import { SharedRoutingModule } from './shared-routing.module';
-import { LoaderComponent } from './components/loader/loader.component';
 import { MatButtonModule } from '@angular/material/button';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { LoaderComponent } from './components/loader/loader.component';
+import { SharedRoutingModule } from './shared-routing.module';
 
 export const materialModules = [
   MatButtonModule,
@@ -17,9 +17,7 @@ export const materialModules = [
 
 
 @NgModule({
-  declarations: [
-
-  ],
+  declarations: [],
   imports: [
     CommonModule,
     SharedRoutingModule,

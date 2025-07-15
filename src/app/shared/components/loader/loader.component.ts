@@ -1,13 +1,13 @@
+import { AsyncPipe, NgIf } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { LoaderService } from '../../../core/services/loader/loader.service';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-loader',
   standalone: true,
   templateUrl: './loader.component.html',
   styleUrl: './loader.component.scss',
-  imports: [CommonModule]
+  imports: [NgIf, AsyncPipe]
 })
 export class LoaderComponent {
   loaderService = inject(LoaderService);
