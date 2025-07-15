@@ -44,6 +44,9 @@ export class ChatLayoutComponent implements AfterViewChecked {
   private messageObserver!: IntersectionObserver;
   currentRoomId!: string;
   typingUsers = new Set<string>();
+  showSidebarContent: boolean = false;
+  filePreviewUrl: string | ArrayBuffer | null = null;
+  typingTimeout?: any;
 
 
   constructor(private renderer: Renderer2, private authService: AuthService, private chatService: ChatService, private fb: FormBuilder, private socket: SocketService, private ngZone: NgZone) {
@@ -74,7 +77,6 @@ export class ChatLayoutComponent implements AfterViewChecked {
     this.applyTheme();
     this.getAllUsers()
     this.getMe();
-
     this.socket.listen<any>('receivePrivateMessage')
       .subscribe(msg => {
         this.privateMessages.push(msg);
@@ -154,7 +156,6 @@ export class ChatLayoutComponent implements AfterViewChecked {
         this.privateMessages.push(msg);
       }
     });
-
   }
 
   toggleTheme() {
@@ -171,9 +172,6 @@ export class ChatLayoutComponent implements AfterViewChecked {
     this.authService.logout()
   }
 
-  onSettings() {
-  }
-
   getAllUsers() {
     this.chatService.getAllUsers().subscribe({
       next: (res: any) => {
@@ -183,29 +181,8 @@ export class ChatLayoutComponent implements AfterViewChecked {
     })
   }
 
-
-
-
-
-  // getUser(id: any) {
-  //   const user = this.users.find((user: any) => user._id === id || user.id === id);
-  //   this.user2Data = user
-  //   console.log(this.user1Data);
-  //   console.log(this.user2Data);
-
-  //   this.getMe();
-
-  //   this.getPrivateMessages(this.user1Data._id, this.user2Data._id)
-  //   if (user) {
-  //     console.log('Selected user:', user);
-  //   } else {
-  //     console.log('User not found');
-  //   }
-  // }
-
   getPrivateMessages() {
     console.log(this.user2Data._id);
-
     this.chatService.getPrivateMessages(this.user1Data._id, this.user2Data._id).subscribe({
       next: (res: any) => {
         this.privateMessages = res
@@ -232,58 +209,6 @@ export class ChatLayoutComponent implements AfterViewChecked {
     })
   }
 
-  //ChatGpt
-
-  // sendMessage() {
-  //   const text = this.chatForm.value.text || '';
-  //   const file = this.selectedFile;
-
-  //   // If both text and file are empty, do nothing
-
-  //   if (file) {
-  //     const reader = new FileReader();
-  //     reader.onload = () => {
-  //       const payload = {
-  //         metadata: {
-  //           senderId: this.user1Data._id,
-  //           receiverId: this.user2Data._id,
-  //           text,
-  //           filename: file.name,
-  //           mimetype: file.type
-  //         },
-  //         buffer: reader.result as ArrayBuffer
-  //       };
-  //       console.log('📤 Emitting uploadMessage:', payload);
-  //       this.socket.emit('uploadMessage', payload);
-  //       this.resetForm();
-  //       this.selectedFile = null
-  //       console.log(this.privateMessages);
-
-  //     };
-  //     this.showPicker = false
-  //     this.socket.emit('stopTyping', {
-  //       to: this.user2Data._id,
-  //       userId: this.user1Data._id
-  //     });
-  //     reader.readAsArrayBuffer(file);
-  //   } else {
-  //     const payload = {
-  //       senderId: this.user1Data._id,
-  //       receiverId: this.user2Data._id,
-  //       text,
-  //       timestamp: new Date()
-  //     };
-  //     console.log('📤 Emitting sendMessage:', payload);
-  //     this.socket.emit('sendMessage', payload);
-  //     this.resetForm();
-  //     this.showPicker = false
-  //     this.socket.emit('stopTyping', {
-  //       to: this.user2Data._id,
-  //       userId: this.user1Data._id
-  //     });
-  //   }
-  // }
-
   extractFileNameWithoutNumbers(fileUrl: string): string {
     if (!fileUrl) return '';
     try {
@@ -299,7 +224,6 @@ export class ChatLayoutComponent implements AfterViewChecked {
     this.chatForm.reset();
     this.selectedFile = undefined;
   }
-  typingTimeout?: any;
 
   notifyTyping() {
     clearTimeout(this.typingTimeout);
@@ -308,8 +232,6 @@ export class ChatLayoutComponent implements AfterViewChecked {
       to: this.user2Data._id,
       userId: this.user1Data._id
     });
-    // this.ngZone.run(() => console.log(this.isTyping)
-    // );
     this.typingTimeout = setTimeout(() => {
       console.log('EMIT stopTyping');
       this.socket.emit('stopTyping', {
@@ -332,23 +254,18 @@ export class ChatLayoutComponent implements AfterViewChecked {
   handleEmojiSelected(event: any) {
     const emoji = event.emoji;
     console.log(emoji);
-
     const currentText = this.chatForm.get('text')?.value || '';
     console.log(currentText);
-
     this.chatForm.patchValue({ text: currentText + emoji.value });
-    // this.showPicker = false;
   }
 
   handleGlobalSkintoneChanged(event: any) {
     console.log('Global skin tone changed:', event.skinTone);
-    // save user preference or update UI accordingly
   }
 
   showEmoji() {
     this.showPicker = !this.showPicker
     console.log(this.showEmoji);
-
   }
 
   storageConfig() {
@@ -369,15 +286,23 @@ export class ChatLayoutComponent implements AfterViewChecked {
   }
 
   onFileSelect(e: Event) {
-    this.selectedFile = (e.target as HTMLInputElement).files?.[0];
-    console.log(this.selectedFile);
+    const file: any = (e.target as HTMLInputElement).files?.[0];
+    console.log(file);
+
+    this.selectedFile = file;
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.filePreviewUrl = reader.result;
+    };
+    reader.readAsDataURL(file);
+
+    console.log('Selected File:', this.selectedFile);
   }
 
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
+  removeSelectedFile() {
+    this.selectedFile = null;
+    this.filePreviewUrl = null;
   }
-
 
   getUser(id: string) {
     const user = this.users.find((u: any) => u._id === id);
@@ -385,7 +310,6 @@ export class ChatLayoutComponent implements AfterViewChecked {
     this.chatService.createOrGetRoom([this.user1Data._id, id])
       .subscribe((res: any) => {
         console.log(res);
-
         this.currentRoomId = res.roomId;
         this.socket.joinRoom(this.currentRoomId);
         this.loadRoomMessages();
@@ -401,7 +325,6 @@ export class ChatLayoutComponent implements AfterViewChecked {
     const text = this.chatForm.value.text;
     const file = this.selectedFile;
     if (!text && !file) return;
-
     const payload: any = {
       senderId: this.user1Data._id,
       roomId: this.currentRoomId,
@@ -412,6 +335,7 @@ export class ChatLayoutComponent implements AfterViewChecked {
       to: this.user2Data._id,
       userId: this.user1Data._id
     });
+    this.showPicker = false
 
     if (file) {
       const reader = new FileReader();
@@ -432,16 +356,24 @@ export class ChatLayoutComponent implements AfterViewChecked {
         });
       };
       reader.readAsArrayBuffer(file);
+      this.removeSelectedFile()
     } else {
       this.socket.emit('sendMessage', payload);
       this.socket.emit('stopTyping', {
         to: this.user2Data._id,
         userId: this.user1Data._id
       });
+      this.removeSelectedFile()
     }
-
     this.resetForm();
   }
 
+  toggleSidebar() {
+    this.showSidebarContent = !this.showSidebarContent;
+  }
 
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 }
