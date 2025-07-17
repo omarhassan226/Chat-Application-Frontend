@@ -76,16 +76,8 @@ export class ChatService {
       .pipe(catchError(this.handleErr));
   }
 
-  markRead(messageIds: string[]): Observable<any> {
-    return this.http.post(`${this.base}/mark-read`, { messageIds }).pipe(catchError(this.handleErr));
-  }
-
-  getRecentPrivate(): Observable<Message[]> {
-    return this.http.get<Message[]>(`${this.base}/private/recent`).pipe(catchError(this.handleErr));
-  }
-
-  getRecentGroup(): Observable<Message[]> {
-    return this.http.get<Message[]>(`${this.base}/group/recent`).pipe(catchError(this.handleErr));
+  getRecentPrivateUsers(): Observable<Message[]> {
+    return this.http.get<Message[]>(`${this.base}/private/recent-users`).pipe(catchError(this.handleErr));
   }
 
   createOrGetRoom(memberIds: string[]): Observable<{ roomId: string }> {

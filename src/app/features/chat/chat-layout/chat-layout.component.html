@@ -1,7 +1,8 @@
 <section class="vh-100 d-flex flex-column">
   <div class="row g-0 flex-grow-1" style="height: 100%">
     <!-- Sidebar -->
-    <div class="col-12 col-md-4 col-lg-3 border-end d-flex flex-column" style="height: 100%">
+    <!-- <div class="col-12 col-md-4 col-lg-3 border-end d-flex flex-column" style="height: 100%"
+      *ngIf="!showSidebarContent">
       <div class="d-flex justify-content-between align-items-center p-2 border-bottom">
         <span class="fw-bold">Users</span>
         <i class="fas fa-plus" style="cursor: pointer; color: #ffb652" (click)="toggleSidebar()"></i>
@@ -21,6 +22,79 @@
                 user.image ||
                 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg'
               " class="rounded-circle" width="50" height="50" alt="User" />
+            <span *ngIf="user.isOnline"
+              class="position-absolute bottom-0 end-0 bg-success border border-white rounded-circle"
+              style="width: 12px; height: 12px"></span>
+          </div>
+          <div class="flex-grow-1">
+            <div class="fw-bold">{{ user.username }}</div>
+            <div class="typing-bubble-list">
+              <div>
+                {{
+                typingUsers.has(user._id)
+                ? "Typing..."
+                : "Last seen " + (user.lastSeen | date : "MMM d, y, HH:mm")
+                }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> -->
+
+    <!-- Sidebar -->
+    <div class="col-12 col-md-4 col-lg-3 border-end d-flex flex-column" style="height: 100%">
+      <div class="d-flex justify-content-between align-items-center p-2 border-bottom">
+        <span class="fw-bold">{{showSidebarContent ? 'All Users' : 'Users'}}</span>
+        <i class="fas fa-plus" style="cursor: pointer; color: #ffb652" (click)="toggleSidebar()"></i>
+      </div>
+      <div class="p-2 border-bottom" *ngIf="showSidebarContent">
+        <input type="text" class="form-control" placeholder="Search users..." [formControl]="searchControl" />
+      </div>
+      <div *ngIf="showSidebarContent && isSearching">
+        <em>Searching...</em>
+      </div>
+
+      <!-- Recent Users -->
+      <div class="list-group list-group-flush flex-grow-1 overflow-auto" style="height: 100%;"
+        *ngIf="!showSidebarContent">
+        <div *ngFor="let user of recentUsersList"
+          class="list-group-item list-group-item-action d-flex align-items-center" (click)="getUser(user._id)"
+          style="cursor: pointer">
+          <div class="position-relative me-3">
+            <img [src]="
+                    user.image ||
+                    'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg'
+                  " class="rounded-circle" width="50" height="50" alt="User" />
+            <span *ngIf="user.isOnline"
+              class="position-absolute bottom-0 end-0 bg-success border border-white rounded-circle"
+              style="width: 12px; height: 12px"></span>
+          </div>
+          <div class="flex-grow-1">
+            <div class="fw-bold">{{ user.username }}</div>
+            <div class="typing-bubble-list">
+              <div>
+                {{
+                typingUsers.has(user._id)
+                ? "Typing..."
+                : "Last seen " + (user.lastSeen | date : "MMM d, y, HH:mm")
+                }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- All Users -->
+      <div *ngIf="showSidebarContent && !isSearching" class="list-group list-group-flush flex-grow-1 overflow-auto"
+        style="height: 100%;">
+        <div *ngFor="let user of users" class="list-group-item list-group-item-action d-flex align-items-center"
+          (click)="getUser(user._id)" style="cursor: pointer">
+          <div class="position-relative me-3">
+            <img [src]="
+                          user.image ||
+                          'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg'
+                        " class="rounded-circle" width="50" height="50" alt="User" />
             <span *ngIf="user.isOnline"
               class="position-absolute bottom-0 end-0 bg-success border border-white rounded-circle"
               style="width: 12px; height: 12px"></span>

@@ -47,7 +47,7 @@ export class ChatLayoutComponent implements AfterViewChecked {
   showSidebarContent: boolean = false;
   filePreviewUrl: string | ArrayBuffer | null = null;
   typingTimeout?: any;
-
+  recentUsersList!: any;
 
   constructor(private renderer: Renderer2, private authService: AuthService, private chatService: ChatService, private fb: FormBuilder, private socket: SocketService, private ngZone: NgZone) {
     this.chatForm = fb.group({
@@ -77,6 +77,7 @@ export class ChatLayoutComponent implements AfterViewChecked {
     this.applyTheme();
     this.getAllUsers()
     this.getMe();
+    this.getRecentUsersList();
     this.socket.listen<any>('receivePrivateMessage')
       .subscribe(msg => {
         this.privateMessages.push(msg);
@@ -90,15 +91,13 @@ export class ChatLayoutComponent implements AfterViewChecked {
       tap(() => this.isSearching = true),
       switchMap(term => {
         if (term.length > 0) {
-          // If the term is not empty, perform the search
           return this.chatService.searchUsers(term).pipe(
-            catchError(() => of([])), // Return an empty array in case of error
+            catchError(() => of([])),
             finalize(() => this.isSearching = false)
           );
         } else {
-          // If the term is empty, return all users
           return this.chatService.getAllUsers().pipe(
-            catchError(() => of([])), // Return an empty array in case of error
+            catchError(() => of([])),
             finalize(() => this.isSearching = false)
           );
         }
@@ -143,7 +142,7 @@ export class ChatLayoutComponent implements AfterViewChecked {
     }, { threshold: 0.5 });
 
     this.socket.listen<any>('messageSeen')
-      .subscribe(({ messageId, seenBy, readAt }) => {
+      .subscribe(({ messageId, readAt }) => {
         const msg = this.privateMessages.find((m: any) => m._id === messageId);
         if (msg) {
           msg.isRead = true;
@@ -239,12 +238,6 @@ export class ChatLayoutComponent implements AfterViewChecked {
         userId: this.user1Data._id
       });
     }, 2000);
-  }
-
-  // بلوك
-  blockUser(userId: string) {
-    this.socket.emit('blockUser', { userId, by: this.user1Data._id });
-    alert('User has been blocked!');
   }
 
   skintoneSetting(): 'both' | 'global' | 'individual' | 'none' {
@@ -370,6 +363,18 @@ export class ChatLayoutComponent implements AfterViewChecked {
 
   toggleSidebar() {
     this.showSidebarContent = !this.showSidebarContent;
+  }
+
+  getRecentUsersList() {
+    this.chatService.getRecentPrivateUsers().subscribe({
+      next: (users: any) => {
+        this.recentUsersList = users;
+        console.log('recentUsers', this.recentUsersList);
+      },
+      error: (err: any) => {
+        console.log(err);
+      }
+    })
   }
 
   ngOnDestroy() {
