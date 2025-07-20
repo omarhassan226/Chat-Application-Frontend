@@ -19,7 +19,7 @@ import { EmojiPickerComponent } from '@chit-chat/ngx-emoji-picker/lib/components
     ChatRoutingModule,
     NgbModule,
     ReactiveFormsModule,
-    EmojiPickerComponent
+    EmojiPickerComponent,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

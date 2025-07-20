@@ -1,86 +1,58 @@
-<div class="login-container">
-  <mat-card class="login-card" @fadeIn>
-    <mat-card-header>
-      <mat-card-title>Login</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
+<section class="vh-100 d-flex">
+  <!-- Left: Login Form -->
+  <div class="col-12 col-md-6 d-flex align-items-center justify-content-center" @slideInFromRight>
+    <div class="w-75">
+      <div class="text-center mb-4">
+        <img src="assets/images/SPOTY CHAT LOGO (2).svg" alt="SpottyChat Logo" style="max-width: 180px;" />
+        <h2 class="fw-bold mt-3">Welcome Back 👋</h2>
+        <p class="text-muted">Login to continue chatting</p>
+      </div>
       <form [formGroup]="loginForm" (ngSubmit)="login()">
-        <mat-form-field appearance="fill">
-          <mat-label>Username</mat-label>
-          <input
-            matInput
-            formControlName="username"
-            placeholder="Enter your username"
-          />
-          <mat-error *ngIf="loginForm.get('username')?.hasError('required')"
-            >Username is required</mat-error
-          >
-          <mat-error *ngIf="loginForm.get('username')?.hasError('username')"
-            >Please enter a valid username</mat-error
-          >
-        </mat-form-field>
+        <div class="mb-3">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Username</mat-label>
+            <input matInput formControlName="username" placeholder="Enter your username" />
+          </mat-form-field>
+        </div>
 
-        <mat-form-field appearance="fill">
-          <mat-label>Password</mat-label>
-          <input
-            matInput
-            [type]="showPassword ? 'text' : 'password'"
-            formControlName="password"
-            placeholder="Enter your password"
-          />
-          <button
-            matSuffix
-            type="button"
-            (click)="togglePasswordVisibility()"
-            class="show-password"
-            style="
-              margin: 0 !important;
-              background-color: transparent;
-              border: none;
-              padding-right: 16px !important;
-              cursor: pointer;
-              color: #b22222 !important;
-            "
-            [attr.aria-label]="'Toggle password visibility'"
-            [attr.aria-pressed]="showPassword"
-          >
-            <mat-icon>{{
-              showPassword ? "visibility_off" : "visibility"
-            }}</mat-icon>
+        <div class="mb-3 position-relative">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Password</mat-label>
+            <input matInput [type]="showPassword ? 'text' : 'password'" formControlName="password"
+              placeholder="Enter your password" />
+            <button matSuffix type="button" (click)="togglePasswordVisibility()" class="show-password"
+              [attr.aria-label]="'Toggle password visibility'" [attr.aria-pressed]="showPassword">
+              <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+          </mat-form-field>
+        </div>
+
+        <div class="d-grid mb-3">
+          <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid || isLoading">
+            {{ isLoading ? 'Logging in...' : 'Login' }}
           </button>
-          <mat-error *ngIf="loginForm.get('password')?.hasError('required')"
-            >Password is required</mat-error
-          >
-          <mat-error *ngIf="loginForm.get('password')?.hasError('minlength')"
-            >Password must be at least 8 characters long</mat-error
-          >
-        </mat-form-field>
+        </div>
 
-        <button
-          mat-raised-button
-          class="login-button"
-          color="primary"
-          type="submit"
-          [disabled]="loginForm.invalid"
-        >
-          Login
-        </button>
-        <button
-          mat-raised-button
-          class="login-button"
-          color="primary"
-          type="button"
-          (click)="goToRegister()"
-        >
-          Don't have an account? Signup
-        </button>
+        <div class="text-center">
+          <span class="text-muted">Don't have an account?</span>
+          <button mat-button type="button" (click)="goToRegister()">Sign up</button>
+        </div>
       </form>
-    </mat-card-content>
-  </mat-card>
-</div>
+    </div>
+  </div>
 
-<lib-toastify-toast-container
-  [position]="'top-right'"
-></lib-toastify-toast-container>
+  <!-- Right: Branding Image -->
+  <div class="col-6 d-none d-md-block p-0" @slideInFromRight>
+    <div class="h-100 w-100" style="
+      background-image: url('assets/images/auth-logo.svg');
+      background-size: cover;
+      background-position: center;
+      border-top-left-radius: 20px;
+      border-bottom-left-radius: 20px;
+    ">
+    </div>
+  </div>
+</section>
 
+<lib-toastify-toast-container [position]="'top-right'"></lib-toastify-toast-container>
 <app-loader></app-loader>

@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../../../core/services/auth/auth.service';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { ToastService } from 'angular-toastify';
+import { CountryISO } from 'ngx-intl-tel-input';
 
 @Component({
   selector: 'app-register',
@@ -16,7 +17,7 @@ import { ToastService } from 'angular-toastify';
         style({ opacity: 0, transform: 'translateY(20px)' }),
         animate('400ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
       ])
-    ])
+    ]),
   ],
 })
 export class RegisterComponent {
@@ -28,11 +29,15 @@ export class RegisterComponent {
   isLoggedIn: boolean = false;
   imagePreview: any | null = null;
   imageFile: File | null = null;
+  CountryISO = CountryISO;
+  preferredCountries: CountryISO[] = [CountryISO.Egypt, CountryISO.UnitedStates];
 
   constructor(private authService: AuthService, private router: Router, private fb: FormBuilder, private _toastService: ToastService) {
     this.registerForm = this.fb.group({
-      username: [''],
-      password: ['']
+      username: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      phone: ['', [Validators.required]],
+      password: ['', [Validators.required]]
     });
   }
 
@@ -62,6 +67,8 @@ export class RegisterComponent {
     const formData = new FormData();
     formData.append('username', this.registerForm.get('username')?.value);
     formData.append('password', this.registerForm.get('password')?.value);
+    formData.append('phone', this.registerForm.get('phone')?.value || '');
+    formData.append('email', this.registerForm.get('email')?.value);
     if (this.imageFile) {
       formData.append('image', this.imageFile);
     }

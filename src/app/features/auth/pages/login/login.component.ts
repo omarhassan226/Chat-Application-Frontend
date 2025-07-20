@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { ToastService } from 'angular-toastify';
+import { slideInAnimation, slideInFromRight } from '../../auth-animation/auth-animations';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,8 @@ import { ToastService } from 'angular-toastify';
         style({ opacity: 0, transform: 'translateY(20px)' }),
         animate('400ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
       ])
-    ])
+    ]),
+    slideInAnimation, slideInFromRight
   ],
 })
 export class LoginComponent {

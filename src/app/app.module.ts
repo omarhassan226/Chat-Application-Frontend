@@ -35,7 +35,7 @@ import { EmojiPickerModule } from '@chit-chat/ngx-emoji-picker/lib/providers';
     HttpClientModule,
     ChatModule,
     ReactiveFormsModule,
-    EmojiPickerModule
+    EmojiPickerModule,
   ],
   providers: [
     {
