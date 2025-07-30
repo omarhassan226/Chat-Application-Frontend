@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../../../core/services/auth/auth.service';
@@ -20,7 +20,7 @@ import { CountryISO } from 'ngx-intl-tel-input';
     ]),
   ],
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
 
 
   registerForm!: FormGroup;
@@ -31,6 +31,7 @@ export class RegisterComponent {
   imageFile: File | null = null;
   CountryISO = CountryISO;
   preferredCountries: CountryISO[] = [CountryISO.Egypt, CountryISO.UnitedStates];
+  showPassword = false;
 
   constructor(private authService: AuthService, private router: Router, private fb: FormBuilder, private _toastService: ToastService) {
     this.registerForm = this.fb.group({
@@ -40,16 +41,23 @@ export class RegisterComponent {
       password: ['', [Validators.required]]
     });
   }
+  ngOnInit(): void {
+    console.log(this.imagePreview);
+  }
 
   onImageSelected(event: Event) {
     const input = event.target as HTMLInputElement;
+    console.log('Image preview:', this.imagePreview);
+
     if (input.files && input.files[0]) {
       const file = input.files[0];
       const reader = new FileReader();
-      this.imageFile = file; // Store the selected file
+      this.imageFile = file;
 
       reader.onload = () => {
         this.imagePreview = reader.result;
+        console.log('Image preview:', this.imagePreview);
+
       };
       reader.readAsDataURL(file);
     }
@@ -63,6 +71,11 @@ export class RegisterComponent {
   register() {
     this.isLoading = true;
     this.errorMessage = '';
+
+    if (this.registerForm.invalid) {
+      this.registerForm.markAllAsTouched();
+      return;
+    }
 
     const formData = new FormData();
     formData.append('username', this.registerForm.get('username')?.value);
@@ -81,7 +94,7 @@ export class RegisterComponent {
         this.isLoading = false;
         setTimeout(() => {
           this.router.navigate(['/auth/login']);
-        }, 1500);
+        }, 1000);
       },
       error: (error: any) => {
         this._toastService.error('Registration failed');
@@ -93,6 +106,10 @@ export class RegisterComponent {
 
   goToLogin() {
     this.router.navigate(['/auth/login']);
+  }
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
   }
 
 }

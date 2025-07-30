@@ -48,7 +48,7 @@ export class LoginComponent {
         this.isLoading = false;
         setTimeout(() => {
           this.router.navigate(['/chat']);
-        }, 1500);
+        }, 1000);
       },
       error: (error: any) => {
         this.toastService.error('Login failed');

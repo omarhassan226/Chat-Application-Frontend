@@ -10,7 +10,7 @@
 
 .signup-image {
   flex: 1;
-  background-color: #f3faff;
+  // background-color: #f3faff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -33,8 +33,13 @@
   justify-content: center;
   align-items: center;
   animation: slideInLeft 1s ease forwards;
-  background: #ffffff;
+  // background: #ffffff;
   padding: 2rem;
+}
+
+.disabled {
+  cursor: not-allowed;
+  background-color: #ccc !important;
 }
 
 .signup-card {
@@ -87,24 +92,91 @@
 
 .image-preview-wrapper {
   position: relative;
-  border: 2px dashed #ccc;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
   overflow: hidden;
-  padding: 5px;
+  border: 2px dashed #ccc;
   background: #fafafa;
+  margin: 0 auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   .image-preview {
-    width: 100px;
-    height: 100px;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
     border-radius: 50%;
   }
 
+  .placeholder {
+    font-size: 2rem;
+    color: #aaa;
+    cursor: pointer;
+  }
+
   .remove-image-btn {
     position: absolute;
-    top: 5px;
-    right: 5px;
+    top: 10px;
+    right: 15px;
+    width: 24px;
+    height: 24px;
+    border: none;
     background: rgba(255, 255, 255, 0.8);
     border-radius: 50%;
+    line-height: 1;
+    font-size: 1.2rem;
+    cursor: pointer;
+  }
+}
+
+section.vh-100 {
+  height: 100vh;
+  overflow-y: scroll;
+}
+
+form {
+  mat-form-field {
+    width: 100%;
+  }
+
+  button[type='submit'] {
+    background-color: #ffc258;
+    color: black;
+    font-weight: bold;
+
+    &:hover {
+      background-color: #ffb652;
+    }
+  }
+
+  .show-password {
+    background-color: transparent;
+    border: none;
+
+    mat-icon {
+      cursor: pointer;
+    }
+  }
+}
+
+img[alt='SpottyChat Logo'] {
+  border-radius: 12px;
+}
+
+.responsive-row {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+
+  >.w-100 {
+    flex: 1;
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 0;
   }
 }
