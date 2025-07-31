@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../../../core/services/auth/auth.service';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { ToastService } from 'angular-toastify';
 import { slideInAnimation, slideInFromRight } from '../../auth-animation/auth-animations';
@@ -31,9 +31,13 @@ export class LoginComponent {
 
   constructor(private authService: AuthService, private router: Router, private fb: FormBuilder, private toastService: ToastService) {
     this.loginForm = this.fb.group({
-      username: [''],
-      password: ['']
+      username: ['', [Validators.required, Validators.minLength(3)]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
     });
+  }
+
+  get f() {
+    return this.loginForm.controls;
   }
 
   login() {

@@ -1,49 +1,7 @@
 <section class="vh-100 d-flex flex-column">
   <div class="row g-0 flex-grow-1" style="height: 100%">
     <!-- Sidebar -->
-    <!-- <div class="col-12 col-md-4 col-lg-3 border-end d-flex flex-column" style="height: 100%"
-      *ngIf="!showSidebarContent">
-      <div class="d-flex justify-content-between align-items-center p-2 border-bottom">
-        <span class="fw-bold">Users</span>
-        <i class="fas fa-plus" style="cursor: pointer; color: #ffb652" (click)="toggleSidebar()"></i>
-      </div>
-      <div class="p-2 border-bottom" *ngIf="showSidebarContent">
-        <input type="text" class="form-control" placeholder="Search users..." [formControl]="searchControl" />
-      </div>
-      <div *ngIf="showSidebarContent && isSearching">
-        <em>Searching...</em>
-      </div>
-      <div *ngIf="showSidebarContent && !isSearching" class="list-group list-group-flush flex-grow-1 overflow-auto"
-        style="height: 100%;">
-        <div *ngFor="let user of users" class="list-group-item list-group-item-action d-flex align-items-center"
-          (click)="getUser(user._id)" style="cursor: pointer">
-          <div class="position-relative me-3">
-            <img [src]="
-                user.image ||
-                'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg'
-              " class="rounded-circle" width="50" height="50" alt="User" />
-            <span *ngIf="user.isOnline"
-              class="position-absolute bottom-0 end-0 bg-success border border-white rounded-circle"
-              style="width: 12px; height: 12px"></span>
-          </div>
-          <div class="flex-grow-1">
-            <div class="fw-bold">{{ user.username }}</div>
-            <div class="typing-bubble-list">
-              <div>
-                {{
-                typingUsers.has(user._id)
-                ? "Typing..."
-                : "Last seen " + (user.lastSeen | date : "MMM d, y, HH:mm")
-                }}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div> -->
-
-    <!-- Sidebar -->
-    <div class="col-12 col-md-4 col-lg-3 border-end d-flex flex-column" style="height: 100%">
+    <!-- <div class="col-12 col-md-4 col-lg-3 border-end d-flex flex-column" style="height: 100%">
       <div class="d-flex justify-content-between align-items-center p-2 border-bottom">
         <span class="fw-bold">{{showSidebarContent ? 'All Users' : 'Users'}}</span>
         <i class="fas fa-plus" style="cursor: pointer; color: #ffb652" (click)="toggleSidebar()"></i>
@@ -55,7 +13,6 @@
         <em>Searching...</em>
       </div>
 
-      <!-- Recent Users -->
       <div class="list-group list-group-flush flex-grow-1 overflow-auto" style="height: 100%;"
         *ngIf="!showSidebarContent">
         <div *ngFor="let user of recentUsersList"
@@ -85,7 +42,6 @@
         </div>
       </div>
 
-      <!-- All Users -->
       <div *ngIf="showSidebarContent && !isSearching" class="list-group list-group-flush flex-grow-1 overflow-auto"
         style="height: 100%;">
         <div *ngFor="let user of users" class="list-group-item list-group-item-action d-flex align-items-center"
@@ -113,11 +69,207 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
+
+    <aside class="col-12 col-md-4 col-sm-12 col-lg-3 border-end" style="height: 100%">
+
+      <div class="flex flex-col md:flex-row h-[100vh] border-b p-2">
+        <nav
+          class="flex md:flex-col items-center md:items-start justify-between space-x-6 md:space-x-0 md:space-y-6 py-2 md:py-4 border-b md:border-b-0 md:border-r border-gray-200 md:w-[48px]">
+          <button
+            class="relative flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 focus:outline-none">
+            <i class="far fa-comment-dots text-gray-600 text-lg">
+            </i>
+            <span
+              class="absolute -right-1 -top-1  bg-primary-accent text-white text-[11px] font-semibold rounded-full w-5 h-5 flex items-center justify-center select-none">
+              3
+            </span>
+            <span class="absolute left-0 top-0 w-1 h-6 rounded-r-md bg-primary-accent hidden md:block">
+            </span>
+          </button>
+          <button class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 focus:outline-none">
+            <i class="fas fa-phone-alt text-gray-600 text-lg">
+            </i>
+          </button>
+          <button class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 focus:outline-none">
+            <i class="far fa-clock text-gray-600 text-lg">
+            </i>
+          </button>
+          <div class="flex-1 hidden md:block">
+          </div>
+          <button class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 focus:outline-none">
+            <i class="far fa-star text-gray-600 text-lg">
+            </i>
+          </button>
+          <button class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 focus:outline-none">
+            <i class="far fa-trash-alt text-gray-600 text-lg">
+            </i>
+          </button>
+          <button class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 focus:outline-none">
+            <i class="fas fa-cog text-gray-600 text-lg">
+            </i>
+          </button>
+          <button class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 focus:outline-none">
+            <img alt="User profile image of a man with short hair and beard, smiling" class="rounded-full" height="40"
+              [src]="user1Data.image" width="40">
+          </button>
+        </nav>
+
+        <section class="flex-1 flex flex-col border-t md:border-t-0 md:border-l border-gray-200 min-w-0">
+          <header class="flex items-center justify-between px-4 py-3 border-b border-gray-200" style="min-height: 56px">
+            <h2 class="text-lg font-semibold text-gray-900 select-text">
+              Chats
+            </h2>
+            <div class="flex items-center space-x-3 text-gray-600 text-[15px]">
+              <button class="hover:bg-gray-100 p-1 rounded-md focus:outline-none">
+                <i class="far fa-edit">
+                </i>
+              </button>
+              <button class="hover:bg-gray-100 p-1 rounded-md focus:outline-none">
+                <i class="fas fa-filter">
+                </i>
+              </button>
+            </div>
+          </header>
+
+          <div class="px-4 py-2 border-b border-gray-200">
+            <div class="relative">
+              <input
+                class="w-full border border-gray-300 rounded-md py-2 pl-3 pr-10 text-sm text-gray-600 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#25D366] focus:border-[#25D366]"
+                placeholder="Search or start new chat" type="search" [formControl]="searchControl">
+              <i
+                class="fas fa-search absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none">
+              </i>
+            </div>
+          </div>
+
+          <ul class="overflow-y-auto flex-1 divide-y divide-gray-100" id="chat-list"
+            style="scrollbar-width: thin; scrollbar-color: #cbd5e1 transparent; min-width: 0;">
+
+            <li class="flex items-center px-4 py-3 cursor-pointer hover:bg-gray-50 select-text" tabindex="0"
+              (click)="getUser(user._id)" *ngFor="let user of users">
+              <img alt="Portrait photo of Maya Kasuma, a woman with long black hair and glasses"
+                class="w-10 h-10 rounded-full object-cover" height="40"
+                [src]="   user.image ||
+                          'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg'" width="40">
+              <div class="flex-1 ml-3 min-w-0">
+                <p class="text-sm font-semibold text-gray-900 truncate">
+                  {{ user.username }}
+                </p>
+                <p class="text-xs text-gray-500 truncate max-w-[180px]">
+                  Yes! OK
+                </p>
+              </div>
+              <div class="flex flex-col items-end space-y-1">
+                <span class="text-xs text-gray-400">
+                  14:54
+                </span>
+                <button class="text-gray-300 hover:text-gray-500 focus:outline-none">
+                  <i class="far fa-star">
+                  </i>
+                </button>
+              </div>
+            </li>
+
+            <!-- <li class="flex items-center px-4 py-3 cursor-pointer hover:bg-gray-50 select-text" tabindex="0">
+              <img alt="Portrait photo of Jason Ballmer, a man and woman hugging"
+                class="w-10 h-10 rounded-full object-cover" height="40"
+                src="https://storage.googleapis.com/a1aa/image/434014c7-3275-41ca-4ff2-6cf2a5fff65c.jpg" width="40">
+              <div class="flex-1 ml-3 min-w-0">
+                <p class="text-sm font-semibold text-gray-900 truncate">
+                  Jason Ballmer
+                </p>
+                <p class="text-xs text-gray-500 truncate max-w-[180px]">
+                  <i class="fas fa-video mr-1">
+                  </i>
+                  Video
+                </p>
+              </div>
+              <div class="flex flex-col items-end space-y-1">
+                <span class="text-xs text-[#25D366] font-semibold">
+                  15:26
+                </span>
+                <span
+                  class="bg-[#25D366] text-white text-[11px] font-semibold rounded-full w-5 h-5 flex items-center justify-center select-none">
+                  3
+                </span>
+              </div>
+            </li>
+
+            <li class="flex items-center px-4 py-3 cursor-pointer hover:bg-gray-50 select-text" tabindex="0">
+              <img alt="Portrait photo of Stasa Benko, a woman with long hair and headphones"
+                class="w-10 h-10 rounded-full object-cover border-2 border-[#25D366]" height="40"
+                src="https://storage.googleapis.com/a1aa/image/3e324035-267a-4fdc-4404-4906739490c3.jpg" width="40">
+              <div class="flex-1 ml-3 min-w-0">
+                <p class="text-sm font-semibold text-[#25D366] truncate">
+                  Stasa Benko
+                </p>
+                <p class="text-xs text-gray-500 truncate max-w-[180px]">
+                  Aww no problem.
+                </p>
+              </div>
+              <div class="flex flex-col items-end space-y-1">
+                <span class="text-xs text-[#25D366] font-semibold">
+                  13:56
+                </span>
+                <span
+                  class="bg-[#25D366] text-white text-[11px] font-semibold rounded-full w-5 h-5 flex items-center justify-center select-none">
+                  2
+                </span>
+              </div>
+            </li>
+
+            <li class="flex items-center px-4 py-3 cursor-pointer hover:bg-gray-50 select-text" tabindex="0">
+              <div class="w-10 h-10 rounded-full bg-[#a2f0d9] flex items-center justify-center">
+                <img alt="Icon of a bowl with chopsticks, representing Family Foodies" height="24"
+                  src="https://storage.googleapis.com/a1aa/image/bcc839ff-adf5-48d1-ce09-9f412d45423e.jpg" width="24">
+              </div>
+              <div class="flex-1 ml-3 min-w-0">
+                <p class="text-sm font-semibold text-gray-900 truncate">
+                  Family Foodies
+                </p>
+                <p class="text-xs text-gray-500 truncate max-w-[180px]">
+                  <i class="fas fa-check-double text-[#25D366] mr-1">
+                  </i>
+                  <i class="far fa-image mr-1">
+                  </i>
+                  Dinner last night
+                </p>
+              </div>
+              <div class="flex flex-col items-end space-y-1">
+                <span class="text-xs text-gray-400">
+                  11:21
+                </span>
+              </div>
+            </li>
+
+            <li class="flex items-center px-4 py-3 cursor-pointer hover:bg-gray-50 select-text" tabindex="0">
+              <img alt="Portrait photo of Mark Rogers, a man with short hair and suit"
+                class="w-10 h-10 rounded-full object-cover" height="40"
+                src="https://storage.googleapis.com/a1aa/image/db10f817-b085-4c6f-ab6f-10894b1860dd.jpg" width="40">
+              <div class="flex-1 ml-3 min-w-0">
+                <p class="text-sm font-semibold text-gray-900 truncate">
+                  Mark Rogers
+                </p>
+                <p class="text-xs text-[#25D366] font-semibold truncate max-w-[180px]">
+                  typing...
+                </p>
+              </div>
+              <div class="flex flex-col items-end space-y-1">
+                <span class="text-xs text-gray-400">
+                  10:56
+                </span>
+              </div>
+            </li> -->
+          </ul>
+        </section>
+      </div>
+
+    </aside>
 
     <!-- Chat -->
     <div *ngIf="user2Data" class="col-12 col-md-8 col-lg-9 d-flex flex-column" style="height: 100%">
-      <!-- Header w/ User Avatar & Theme Dropdown -->
+
       <div class="d-flex align-items-center justify-content-between p-3 border-bottom">
         <div class="d-flex align-items-center">
           <img [src]="user2Data?.image || 'assets/images/default-user.jpg'" class="rounded-circle me-2" width="45"
@@ -177,7 +329,6 @@
         </div>
       </div>
 
-      <!-- Chat Body -->
       <div #messageContainer class="flex-grow-1 overflow-auto p-3" style="
           scroll-behavior: smooth;
           background-image: url('assets/images/Untitled-1.png');
@@ -244,7 +395,6 @@
         </div>
       </div>
 
-      <!-- File Preview Section -->
       <div *ngIf="selectedFile" class="px-3 py-2" style="border-top: 1px solid #ddd; background: #f9f9f9">
         <div class="d-flex align-items-center justify-content-between">
           <div class="d-flex align-items-center gap-2">
@@ -265,7 +415,6 @@
         </div>
       </div>
 
-      <!-- Input -->
       <form [formGroup]="chatForm" class="border-top p-3 d-flex align-items-center" style="position: relative">
         <ch-emoji-picker *ngIf="showPicker" [width]="300" [height]="350" [autofocus]="false"
           [skintoneSetting]="skintoneSetting()" (onEmojiSelected)="handleEmojiSelected($event)"
@@ -275,7 +424,6 @@
         <i class="fas fa-paperclip text-muted me-3" style="cursor: pointer" (click)="fileInput.click()"
           (change)="onFileSelect($event)"></i>
 
-        <!-- Smile button toggles picker -->
         <i class="fas fa-smile text-muted me-3" (click)="showEmoji()" style="cursor: pointer"></i>
 
         <input type="text" class="form-control me-2" placeholder="Type a message" formControlName="text"
@@ -286,6 +434,7 @@
         </button>
       </form>
     </div>
+
     <div *ngIf="!user2Data" style="display: flex"
       class="col-12 col-md-8 col-lg-9 d-flex flex-column justify-content-center align-items-center text-center">
       <div style="

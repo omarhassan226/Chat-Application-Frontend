@@ -1,10 +1,13 @@
-
 html,
 body,
 section,
 .vh-100 {
   height: 100% !important;
   margin: 0;
+}
+
+.bg-primary-accent {
+  background-color: #25D366 !important;
 }
 
 section.vh-100 {
@@ -48,7 +51,7 @@ section.vh-100 {
   display: flex;
   width: fit-content;
   align-items: center;
-  justify-content:center;
+  justify-content: center;
   gap: 8px;
   padding: 10px 16px;
   background: #e0d4ff;
@@ -207,19 +210,4 @@ section.vh-100 {
   color: #007bff;
   transform: scale(1.2);
   transition: 0.2s ease;
-}
-
-// .sidebar-content {
-//   max-height: 0;
-//   // overflow: hidden;
-//   opacity: 0;
-//   transform: translateX(-100%);
-//   transition: all 0.4s ease-in-out;
-// }
-
-.sidebar-content.show {
-  max-height: 100%;
-  /* Adjust as needed */
-  opacity: 1;
-  transform: translateX(0);
 }

@@ -1,58 +1,61 @@
-<section class="vh-100 d-flex">
+<section class="flex h-screen">
   <!-- Left: Login Form -->
-  <div class="col-12 col-md-6 d-flex align-items-center justify-content-center" @slideInFromRight>
-    <div class="w-75">
-      <div class="text-center mb-4">
-        <img src="assets/images/SPOTY CHAT LOGO (2).svg" alt="SpottyChat Logo" style="max-width: 180px;" />
-        <h2 class="fw-bold mt-3">Welcome Back 👋</h2>
-        <p class="text-muted">Login to continue chatting</p>
+  <div class="flex items-center justify-center w-full md:w-1/2 p-6 bg-white shadow-lg">
+    <div class="w-full max-w-sm">
+      <div class="text-center mb-6">
+        <img src="assets/images/SPOTY CHAT LOGO (2).svg" alt="SpottyChat Logo" class="mx-auto mb-4 w-36" />
+        <h2 class="text-2xl font-semibold text-gray-800">Welcome Back 👋</h2>
+        <p class="text-gray-500">Login to continue chatting</p>
       </div>
+
       <form [formGroup]="loginForm" (ngSubmit)="login()">
-        <div class="mb-3">
-          <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Username</mat-label>
-            <input matInput formControlName="username" placeholder="Enter your username" />
-          </mat-form-field>
+        <div class="mb-4">
+          <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+          <input id="username" formControlName="username" type="text" placeholder="Enter your username"
+            class="w-full mt-1 p-2 border border-gray-300 rounded-md text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#ffc258] focus:border-[#ffc258]"
+            [class.border-red-500]="loginForm.get('username')?.hasError('required') && loginForm.get('username')?.touched"
+            aria-describedby="username-error" />
+          <p *ngIf="loginForm.get('username')?.hasError('required') && loginForm.get('username')?.touched"
+            id="username-error" class="text-red-500 text-xs mt-1">Username is required</p>
         </div>
 
-        <div class="mb-3 position-relative">
-          <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Password</mat-label>
-            <input matInput [type]="showPassword ? 'text' : 'password'" formControlName="password"
-              placeholder="Enter your password" />
-            <button matSuffix type="button" (click)="togglePasswordVisibility()" class="show-password"
-              [attr.aria-label]="'Toggle password visibility'" [attr.aria-pressed]="showPassword">
-              <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
-            </button>
-          </mat-form-field>
+        <div class="relative mb-4">
+          <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+          <input id="password" [type]="showPassword ? 'text' : 'password'" formControlName="password"
+            placeholder="Enter your password"
+            class="w-full mt-1 p-2 border border-gray-300 rounded-md text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#ffc258] focus:border-[#ffc258]"
+            [class.border-red-500]="loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched"
+            aria-describedby="password-error" />
+          <button type="button" (click)="togglePasswordVisibility()"
+            class="absolute right-3 top-9 text-gray-500 hover:text-gray-700" aria-label="Toggle password visibility"
+            [attr.aria-pressed]="showPassword">
+            <i class="fas" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+          </button>
+          <p *ngIf="loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched"
+            id="password-error" class="text-red-500 text-xs mt-1">Password is required</p>
         </div>
 
-        <div class="d-grid mb-3">
-          <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid || isLoading">
+        <div class="mb-4">
+          <button type="submit" [disabled]="loginForm.invalid || isLoading"
+            class="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-gray-400">
             {{ isLoading ? 'Logging in...' : 'Login' }}
           </button>
         </div>
 
         <div class="text-center">
-          <span class="text-muted">Don't have an account?</span>
-          <button mat-button type="button" (click)="goToRegister()">Sign up</button>
+          <span class="text-sm text-gray-500">Don't have an account?</span>
+          <button type="button" (click)="goToRegister()"
+            class="text-sm font-medium text-indigo-600 hover:text-indigo-700">
+            Sign up
+          </button>
         </div>
       </form>
     </div>
   </div>
 
   <!-- Right: Branding Image -->
-  <div class="col-6 d-none d-md-block p-0" @slideInFromRight>
-    <div class="h-100 w-100" style="
-      background-image: url('assets/images/auth-logo.svg');
-      background-size: cover;
-      background-position: center;
-      border-top-left-radius: 20px;
-      border-bottom-left-radius: 20px;
-    ">
-    </div>
+  <div class="hidden md:block w-1/2 bg-cover bg-center" style="background-image: url('assets/images/auth-logo.svg');">
   </div>
 </section>
-
 <lib-toastify-toast-container [position]="'top-right'"></lib-toastify-toast-container>
 <app-loader></app-loader>
