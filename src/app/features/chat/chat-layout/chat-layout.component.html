@@ -109,15 +109,48 @@
             <i class="fas fa-cog text-gray-600 text-lg">
             </i>
           </button>
-          <button class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 focus:outline-none">
-            <img alt="User profile image of a man with short hair and beard, smiling" class="rounded-full" height="40"
-              [src]="user1Data.image" width="40">
-          </button>
+          <!-- <button class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 focus:outline-none">
+            <img ngbDropdownToggle alt="User profile image of a man with short hair and beard, smiling"
+              class="rounded-full" height="40" [src]="user1Data.image" width="40">
+          </button> -->
+          <div ngbDropdown class="dropdown">
+            <button
+              class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 focus:outline-none">
+              <img ngbDropdownToggle alt="User profile image of a man with short hair and beard, smiling"
+                class="rounded-full" height="40" [src]="user1Data.image" width="40">
+            </button>
+            <ul ngbDropdownMenu class="dropdown-menu dropdown-menu-end" [attr.data-bs-theme]="theme">
+              <li>
+                <button class="dropdown-item">
+                  <i class="fas fa-cog me-2"></i>Settings
+                </button>
+              </li>
+              <li>
+                <button class="dropdown-item d-flex justify-content-between align-items-center" (click)="toggleTheme()">
+                  <span><i class="fas" [ngClass]="theme === 'light' ? 'fa-moon' : 'fa-sun'"></i>
+                    {{ theme === "light" ? "Dark Mode" : "Light Mode" }}
+                  </span>
+                  <i class="fas" [ngClass]="
+                                      theme === 'light' ? 'fa-toggle-off' : 'fa-toggle-on'
+                                    "></i>
+                </button>
+              </li>
+              <li>
+                <hr class="dropdown-divider" />
+              </li>
+              <li>
+                <button class="dropdown-item text-danger" (click)="onLogout()">
+                  <i class="fas fa-sign-out-alt me-2"></i>Logout
+                </button>
+              </li>
+            </ul>
+          </div>
         </nav>
 
         <section class="flex-1 flex flex-col border-t md:border-t-0 md:border-l border-gray-200 min-w-0">
           <header class="flex items-center justify-between px-4 py-3 border-b border-gray-200" style="min-height: 56px">
-            <h2 class="text-lg font-semibold text-gray-900 select-text">
+            <h2 class="text-lg font-semibold select-text"
+              [ngClass]="{'text-gray-200': theme === 'dark', 'text-gray-700': theme === 'light'}">
               Chats
             </h2>
             <div class="flex items-center space-x-3 text-gray-600 text-[15px]">
@@ -134,8 +167,8 @@
 
           <div class="px-4 py-2 border-b border-gray-200">
             <div class="relative">
-              <input
-                class="w-full border border-gray-300 rounded-md py-2 pl-3 pr-10 text-sm text-gray-600 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#25D366] focus:border-[#25D366]"
+              <input [ngClass]="{'text-gray-200': theme === 'dark', 'text-gray-700': theme === 'light'}"
+                class="w-full border border-gray-300 rounded-md py-2 pl-3 pr-10 text-sm  placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#25D366] focus:border-[#25D366]"
                 placeholder="Search or start new chat" type="search" [formControl]="searchControl">
               <i
                 class="fas fa-search absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none">
@@ -149,16 +182,26 @@
             <li class="flex items-center px-4 py-3 cursor-pointer hover:bg-gray-50 select-text" tabindex="0"
               (click)="getUser(user._id)" *ngFor="let user of users">
               <img alt="Portrait photo of Maya Kasuma, a woman with long black hair and glasses"
-                class="w-10 h-10 rounded-full object-cover" height="40"
+                class="w-10 h-10 rounded-full object-cover"
                 [src]="   user.image ||
-                          'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg'" width="40">
+                          'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg'">
               <div class="flex-1 ml-3 min-w-0">
-                <p class="text-sm font-semibold text-gray-900 truncate">
+                <p class="text-sm font-semibold truncate"
+                  [ngClass]="{'text-gray-200': theme === 'dark', 'text-gray-700': theme === 'light'}">
                   {{ user.username }}
                 </p>
-                <p class="text-xs text-gray-500 truncate max-w-[180px]">
+                <!-- <p class="text-xs text-gray-500 truncate max-w-[180px]">
                   Yes! OK
-                </p>
+                </p> -->
+                <div class="typing-bubble-list" style="font-size: small;">
+                  <div>
+                    {{
+                    typingUsers.has(user._id)
+                    ? "Typing..."
+                    : 'Yes! ok'
+                    }}
+                  </div>
+                </div>
               </div>
               <div class="flex flex-col items-end space-y-1">
                 <span class="text-xs text-gray-400">
@@ -272,8 +315,8 @@
 
       <div class="d-flex align-items-center justify-content-between p-3 border-bottom">
         <div class="d-flex align-items-center">
-          <img [src]="user2Data?.image || 'assets/images/default-user.jpg'" class="rounded-circle me-2" width="45"
-            height="45" alt="Chat User" />
+          <img [src]="user2Data?.image || 'assets/images/default-user.jpg'" class="rounded-circle me-2"
+            style="width: 45px; height:45px;" alt="Chat User" />
           <div>
             <div class="fw-bold">
               {{ user2Data?.username || "Select a chat" }}
@@ -297,7 +340,7 @@
           </div>
         </div>
 
-        <div ngbDropdown class="dropdown">
+        <!-- <div ngbDropdown class="dropdown">
           <a ngbDropdownToggle class="d-flex align-items-center text-muted">
             <img [src]="user1Data.image" alt="avatar" class="rounded-circle" width="40" height="40" />
           </a>
@@ -326,7 +369,7 @@
               </button>
             </li>
           </ul>
-        </div>
+        </div> -->
       </div>
 
       <div #messageContainer class="flex-grow-1 overflow-auto p-3" style="

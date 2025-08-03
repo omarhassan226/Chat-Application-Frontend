@@ -1,9 +1,9 @@
-import { AfterViewChecked, AfterViewInit, Component, ElementRef, NgZone, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, NgZone, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
 import { AuthService } from '../../../core/services/auth/auth.service';
 import { ChatService } from '../../../core/services/chat/chat.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { SocketService } from '../../../core/services/socket/socket.service';
-import { catchError, debounceTime, distinctUntilChanged, exhaustMap, filter, finalize, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, filter, finalize, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { animate, style, transition, trigger } from '@angular/animations';
 
 @Component({
@@ -50,7 +50,7 @@ export class ChatLayoutComponent implements AfterViewChecked {
   recentUsersList!: any;
 
   constructor(private renderer: Renderer2, private authService: AuthService, private chatService: ChatService, private fb: FormBuilder, private socket: SocketService, private ngZone: NgZone) {
-    this.chatForm = fb.group({
+    this.chatForm = this.fb.group({
       text: ['', Validators.required]
     })
   }
@@ -174,7 +174,8 @@ export class ChatLayoutComponent implements AfterViewChecked {
   getAllUsers() {
     this.chatService.getAllUsers().subscribe({
       next: (res: any) => {
-        this.users = res
+        const users = res.filter((user: any) => user._id !== this.user1Data._id);
+        this.users = users;
         console.log(this.users);
       }
     })
