@@ -10,11 +10,9 @@
 
 .signup-image {
   flex: 1;
-  // background-color: #f3faff;
   display: flex;
   align-items: center;
   justify-content: center;
-  animation: slideInRight 1s ease forwards;
 
   img {
     width: 80%;
@@ -27,14 +25,18 @@
   }
 }
 
+.bgImage {
+  background-size: 90%;
+  background-repeat: no-repeat;
+  width: 100%;
+  background-position: center;
+}
+
 .signup-form-container {
-  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  animation: slideInLeft 1s ease forwards;
-  // background: #ffffff;
-  padding: 2rem;
+  padding: 1.5rem;
 }
 
 .disabled {
@@ -47,27 +49,19 @@
   max-width: 400px;
 }
 
+.right-section {
+  animation: slideInLeft 0.5s ease-in-out;
+}
+
 /* Animations */
 @keyframes slideInLeft {
   from {
-    transform: translateX(-100%);
+    transform: translateY(-100%);
     opacity: 0;
   }
 
   to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-@keyframes slideInRight {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-
-  to {
-    transform: translateX(0);
+    transform: translateY(0);
     opacity: 1;
   }
 }
@@ -79,7 +73,7 @@
   }
 
   to {
-    transform: translateY(0px);
+    transform: translateY(0);
     opacity: 1;
   }
 }
@@ -99,7 +93,6 @@
   border: 2px dashed #ccc;
   background: #fafafa;
   margin: 0 auto;
-
   display: flex;
   align-items: center;
   justify-content: center;
@@ -126,7 +119,6 @@
     border: none;
     background: rgba(255, 255, 255, 0.8);
     border-radius: 50%;
-    line-height: 1;
     font-size: 1.2rem;
     cursor: pointer;
   }
@@ -134,7 +126,7 @@
 
 section.vh-100 {
   height: 100vh;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 form {

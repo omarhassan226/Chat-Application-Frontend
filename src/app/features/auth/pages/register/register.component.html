@@ -3,23 +3,20 @@
   <!-- <div class="col-12 col-md-6 d-none d-md-block p-0 signup-image">
     <div class="h-full w-full"></div>
   </div> -->
-  <div class="col-12 col-md-6 d-none d-md-block p-0 signup-image">
-    <div class="h-full w-full" style="
-        background-image: url('assets/images/auth-logo.svg');
-        background-size: cover;
-        background-position: center;
-        border-top-left-radius: 20px;
-        border-bottom-left-radius: 20px;
-      ">
-    </div>
-  </div>
 
   <!-- Left: Registration Form -->
-  <div class="col-12 col-md-6 flex items-center justify-center signup-form-container">
+  <div class="flex items-center justify-center w-full md:w-full p-6 right-section" style="background-color: #f9f9f9f9;">
     <div class="w-3/4 max-w-md">
-      <div class="text-center mb-6">
+      <!-- <div class="text-center mb-6">
         <img src="assets/images/SPOTY CHAT LOGO (2).svg" alt="SpottyChat Logo" class="rounded-xl mx-auto" />
-        <h2 class="text-2xl font-bold mt-3 text-gray-900">Create Your Account 👋</h2>
+        <h2 class="text-2xl font-bold mt-3 text-gray-900">
+          Create Your Account 👋
+        </h2>
+        <p class="text-gray-500">Join SpottyChat and start connecting</p>
+      </div> -->
+      <div class="text-center mb-6">
+        <img src="assets/images/SPOTY CHAT LOGO (2).svg" alt="SpottyChat Logo" class="mx-auto mb-4 w-36" />
+        <h2 class="text-2xl font-semibold text-gray-800">Create Your Account 👋</h2>
         <p class="text-gray-500">Join SpottyChat and start connecting</p>
       </div>
 
@@ -33,11 +30,14 @@
           </ng-template>
           <button *ngIf="imagePreview" type="button"
             class="absolute top-2 right-2 w-6 h-6 bg-white/80 rounded-full text-sm flex items-center justify-center cursor-pointer"
-            (click)="removeImage()" aria-label="Remove image">&times;</button>
+            (click)="removeImage()" aria-label="Remove image">
+            &times;
+          </button>
         </div>
         <input type="file" accept="image/*" (change)="onImageSelected($event)" hidden #fileInput />
-        <button type="button" class="btn btn-outline-secondary mt-2 w-full" (click)="fileInput.click()">Choose
-          image</button>
+        <button type="button" class="btn btn-outline-secondary mt-2 w-full" (click)="fileInput.click()">
+          Choose image
+        </button>
       </div>
 
       <form [formGroup]="registerForm" (ngSubmit)="register()" class="flex flex-col gap-4">
@@ -46,59 +46,94 @@
             <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
             <input id="username" formControlName="username" type="text" placeholder="Enter your username"
               class="w-full mt-1 p-2 border border-gray-300 rounded-md text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#ffc258] focus:border-[#ffc258]"
-              [class.border-red-500]="registerForm.get('username')?.hasError('required') && registerForm.get('username')?.touched"
-              aria-describedby="username-error" />
-            <p *ngIf="registerForm.get('username')?.hasError('required') && registerForm.get('username')?.touched"
-              id="username-error" class="text-red-500 text-xs mt-1">Username is required</p>
+              [class.border-red-500]="
+                registerForm.get('username')?.hasError('required') &&
+                registerForm.get('username')?.touched
+              " aria-describedby="username-error" />
+            <p *ngIf="
+                registerForm.get('username')?.hasError('required') &&
+                registerForm.get('username')?.touched
+              " id="username-error" class="text-red-500 text-xs mt-1">
+              Username is required
+            </p>
           </div>
           <div class="flex-1">
             <label for="phone" class="block text-sm font-medium text-gray-700">Phone</label>
             <input id="phone" formControlName="phone" type="text" placeholder="Enter your phone number"
               class="w-full mt-1 p-2 border border-gray-300 rounded-md text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#ffc258] focus:border-[#ffc258]"
-              [class.border-red-500]="registerForm.get('phone')?.hasError('required') && registerForm.get('phone')?.touched"
-              aria-describedby="phone-error" />
-            <p *ngIf="registerForm.get('phone')?.hasError('required') && registerForm.get('phone')?.touched"
-              id="phone-error" class="text-red-500 text-xs mt-1">Phone number is required</p>
+              [class.border-red-500]="
+                registerForm.get('phone')?.hasError('required') &&
+                registerForm.get('phone')?.touched
+              " aria-describedby="phone-error" />
+            <p *ngIf="
+                registerForm.get('phone')?.hasError('required') &&
+                registerForm.get('phone')?.touched
+              " id="phone-error" class="text-red-500 text-xs mt-1">
+              Phone number is required
+            </p>
           </div>
         </div>
         <div>
           <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
           <input id="email" formControlName="email" type="email" placeholder="Enter your email"
             class="w-full mt-1 p-2 border border-gray-300 rounded-md text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#ffc258] focus:border-[#ffc258]"
-            [class.border-red-500]="(registerForm.get('email')?.hasError('required') || registerForm.get('email')?.hasError('email')) && registerForm.get('email')?.touched"
-            aria-describedby="email-error" />
-          <p *ngIf="registerForm.get('email')?.hasError('required') && registerForm.get('email')?.touched"
-            id="email-error" class="text-red-500 text-xs mt-1">Email is required</p>
-          <p *ngIf="registerForm.get('email')?.hasError('email') && registerForm.get('email')?.touched" id="email-error"
-            class="text-red-500 text-xs mt-1">Enter a valid email address</p>
+            [class.border-red-500]="
+              (registerForm.get('email')?.hasError('required') ||
+                registerForm.get('email')?.hasError('email')) &&
+              registerForm.get('email')?.touched
+            " aria-describedby="email-error" />
+          <p *ngIf="
+              registerForm.get('email')?.hasError('required') &&
+              registerForm.get('email')?.touched
+            " id="email-error" class="text-red-500 text-xs mt-1">
+            Email is required
+          </p>
+          <p *ngIf="
+              registerForm.get('email')?.hasError('email') &&
+              registerForm.get('email')?.touched
+            " id="email-error" class="text-red-500 text-xs mt-1">
+            Enter a valid email address
+          </p>
         </div>
         <div class="relative">
           <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
           <input id="password" [type]="showPassword ? 'text' : 'password'" formControlName="password"
             placeholder="Enter your password"
             class="w-full mt-1 p-2 border border-gray-300 rounded-md text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#ffc258] focus:border-[#ffc258]"
-            [class.border-red-500]="registerForm.get('password')?.hasError('required') && registerForm.get('password')?.touched"
-            aria-describedby="password-error" />
+            [class.border-red-500]="
+              registerForm.get('password')?.hasError('required') &&
+              registerForm.get('password')?.touched
+            " aria-describedby="password-error" />
           <button type="button" (click)="togglePasswordVisibility()"
             class="absolute right-3 top-9 text-gray-500 hover:text-gray-700" aria-label="Toggle password visibility"
             [attr.aria-pressed]="showPassword">
             <i class="fas" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
           </button>
-          <p *ngIf="registerForm.get('password')?.hasError('required') && registerForm.get('password')?.touched"
-            id="password-error" class="text-red-500 text-xs mt-1">Password is required</p>
+          <p *ngIf="
+              registerForm.get('password')?.hasError('required') &&
+              registerForm.get('password')?.touched
+            " id="password-error" class="text-red-500 text-xs mt-1">
+            Password is required
+          </p>
         </div>
-        <button type="submit"
-          class="btn w-full bg-[#ffc258] text-black font-bold hover:bg-[#ffb652] disabled:bg-gray-400 disabled:cursor-not-allowed"
-          [disabled]="registerForm.invalid || isLoading">
-          {{ isLoading ? 'Registering...' : 'Sign Up' }}
-        </button>
+        <div class="mb-4">
+          <button type="submit" [disabled]="registerForm.invalid || isLoading"
+            class="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-gray-400">
+            {{ isLoading ? 'Logging in...' : 'Sign up' }}
+          </button>
+        </div>
         <div class="text-center">
           <span class="text-gray-500">Already have an account?</span>
-          <button type="button" class="text-[#ffc258] hover:text-[#ffb652] font-medium"
-            (click)="goToLogin()">Login</button>
+          <button type="button" class="text-[#ffc258] hover:text-[#ffb652] font-medium" (click)="goToLogin()">
+            Login
+          </button>
         </div>
       </form>
     </div>
+  </div>
+
+  <div class="hidden md:block w-1/2 bg-cover bg-center bgImage"
+    style="background-image: url('assets/images/chatBg.svg');">
   </div>
 </section>
 

@@ -31,3 +31,43 @@ form {
 img[alt='SpottyChat Logo'] {
   border-radius: 12px;
 }
+
+.bgImage {
+  background-size: 90%;
+  background-repeat: no-repeat;
+  width: 100%;
+  background-position: 50%;
+}
+
+.left-section {
+  animation: slideInRight 0.5s ease-in-out;
+}
+
+.right-section {
+  animation: slideInLeft 0.5s ease-in-out;
+}
+
+/* Animations */
+@keyframes slideInLeft {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
