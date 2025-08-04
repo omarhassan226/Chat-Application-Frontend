@@ -75,8 +75,8 @@ export class ChatLayoutComponent implements AfterViewChecked {
   ngOnInit() {
     this.theme = localStorage.getItem('theme') as any || 'light';
     this.applyTheme();
-    this.getAllUsers()
     this.getMe();
+    this.getAllUsers()
     this.getRecentUsersList();
     this.socket.listen<any>('receivePrivateMessage')
       .subscribe(msg => {
@@ -172,13 +172,17 @@ export class ChatLayoutComponent implements AfterViewChecked {
   }
 
   getAllUsers() {
+
     this.chatService.getAllUsers().subscribe({
       next: (res: any) => {
         const users = res.filter((user: any) => user._id !== this.user1Data._id);
         this.users = users;
-        console.log(this.users);
+        console.log('users', this.users);
+      },
+      error: (err) => {
+        console.error('Error fetching users', err);
       }
-    })
+    });
   }
 
   getPrivateMessages() {

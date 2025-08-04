@@ -5,7 +5,8 @@
   </div> -->
 
   <!-- Left: Registration Form -->
-  <div class="flex items-center justify-center w-full md:w-full p-6 right-section" style="background-color: #f9f9f9f9;">
+  <div class="flex items-center justify-center w-full md:w-full p-6 right-section"
+    [ngStyle]="{'property': theme === 'light' ? 'background-color: #f9f9f9;' : 'background-color: #1a202c;'}">
     <div class="w-3/4 max-w-md">
       <!-- <div class="text-center mb-6">
         <img src="assets/images/SPOTY CHAT LOGO (2).svg" alt="SpottyChat Logo" class="rounded-xl mx-auto" />
@@ -15,8 +16,19 @@
         <p class="text-gray-500">Join SpottyChat and start connecting</p>
       </div> -->
       <div class="text-center mb-6">
+        <li>
+          <button class="dropdown-item d-flex justify-content-between align-items-center" (click)="toggleTheme()">
+            <span><i class="fas" [ngClass]="theme === 'light' ? 'fa-moon' : 'fa-sun'"></i>
+              {{ theme === "light" ? "Dark Mode" : "Light Mode" }}
+            </span>
+            <i class="fas" [ngClass]="theme === 'light' ? 'fa-toggle-off' : 'fa-toggle-on'"></i>
+          </button>
+        </li>
         <img src="assets/images/SPOTY CHAT LOGO (2).svg" alt="SpottyChat Logo" class="mx-auto mb-4 w-36" />
-        <h2 class="text-2xl font-semibold text-gray-800">Create Your Account 👋</h2>
+        <h2 class="text-2xl font-semibold text-gray-800"
+          [ngClass]="{'text-gray-800': theme === 'light', 'text-white': theme === 'dark'}">
+          Create Your Account 👋
+        </h2>
         <p class="text-gray-500">Join SpottyChat and start connecting</p>
       </div>
 
@@ -45,6 +57,7 @@
           <div class="flex-1">
             <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
             <input id="username" formControlName="username" type="text" placeholder="Enter your username"
+              [ngClass]="{'text-gray-800': theme === 'light', 'text-white': theme === 'dark'}"
               class="w-full mt-1 p-2 border border-gray-300 rounded-md text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#ffc258] focus:border-[#ffc258]"
               [class.border-red-500]="
                 registerForm.get('username')?.hasError('required') &&
@@ -60,6 +73,7 @@
           <div class="flex-1">
             <label for="phone" class="block text-sm font-medium text-gray-700">Phone</label>
             <input id="phone" formControlName="phone" type="text" placeholder="Enter your phone number"
+              [ngClass]="{'text-gray-800': theme === 'light', 'text-white': theme === 'dark'}"
               class="w-full mt-1 p-2 border border-gray-300 rounded-md text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#ffc258] focus:border-[#ffc258]"
               [class.border-red-500]="
                 registerForm.get('phone')?.hasError('required') &&
@@ -76,6 +90,7 @@
         <div>
           <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
           <input id="email" formControlName="email" type="email" placeholder="Enter your email"
+            [ngClass]="{'text-gray-800': theme === 'light', 'text-white': theme === 'dark'}"
             class="w-full mt-1 p-2 border border-gray-300 rounded-md text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#ffc258] focus:border-[#ffc258]"
             [class.border-red-500]="
               (registerForm.get('email')?.hasError('required') ||
@@ -99,6 +114,7 @@
           <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
           <input id="password" [type]="showPassword ? 'text' : 'password'" formControlName="password"
             placeholder="Enter your password"
+            [ngClass]="{'text-gray-800': theme === 'light', 'text-white': theme === 'dark'}"
             class="w-full mt-1 p-2 border border-gray-300 rounded-md text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#ffc258] focus:border-[#ffc258]"
             [class.border-red-500]="
               registerForm.get('password')?.hasError('required') &&
@@ -119,7 +135,7 @@
         <div class="mb-4">
           <button type="submit" [disabled]="registerForm.invalid || isLoading"
             class="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-gray-400">
-            {{ isLoading ? 'Logging in...' : 'Sign up' }}
+            {{ isLoading ? "Logging in..." : "Sign up" }}
           </button>
         </div>
         <div class="text-center">
@@ -133,8 +149,7 @@
   </div>
 
   <div class="hidden md:block w-1/2 bg-cover bg-center bgImage"
-    style="background-image: url('assets/images/chatBg.svg');">
-  </div>
+    style="background-image: url('assets/images/chatBg.svg')"></div>
 </section>
 
 <lib-toastify-toast-container [position]="'top-right'"></lib-toastify-toast-container>

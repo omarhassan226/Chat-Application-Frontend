@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { AuthService } from '../../../../core/services/auth/auth.service';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -21,19 +21,34 @@ import { slideInAnimation, slideInFromRight } from '../../auth-animation/auth-an
     slideInAnimation, slideInFromRight
   ],
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
 
+  theme: 'light' | 'dark' = 'light';
   loginForm!: FormGroup;
   errorMessage: string = '';
   isLoading: boolean = false;
   isLoggedIn: boolean = false;
   showPassword = false;
 
-  constructor(private authService: AuthService, private router: Router, private fb: FormBuilder, private toastService: ToastService) {
+  constructor(private renderer: Renderer2, private authService: AuthService, private router: Router, private fb: FormBuilder, private toastService: ToastService) {
     this.loginForm = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(3)]],
       password: ['', [Validators.required, Validators.minLength(6)]],
     });
+  }
+  ngOnInit(): void {
+    this.theme = localStorage.getItem('theme') as any || 'light';
+    this.applyTheme();
+  }
+
+  toggleTheme() {
+    this.theme = (this.theme === 'light') ? 'dark' : 'light';
+    localStorage.setItem('theme', this.theme);
+    this.applyTheme();
+  }
+
+  applyTheme() {
+    this.renderer.setAttribute(document.documentElement, 'data-bs-theme', this.theme);
   }
 
   get f() {

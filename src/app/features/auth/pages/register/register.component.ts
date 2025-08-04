@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../../../core/services/auth/auth.service';
@@ -22,7 +22,7 @@ import { CountryISO } from 'ngx-intl-tel-input';
 })
 export class RegisterComponent implements OnInit {
 
-
+  theme: 'light' | 'dark' = 'light';
   registerForm!: FormGroup;
   errorMessage: string = '';
   isLoading: boolean = false;
@@ -33,7 +33,7 @@ export class RegisterComponent implements OnInit {
   preferredCountries: CountryISO[] = [CountryISO.Egypt, CountryISO.UnitedStates];
   showPassword = false;
 
-  constructor(private authService: AuthService, private router: Router, private fb: FormBuilder, private _toastService: ToastService) {
+  constructor(private renderer: Renderer2, private authService: AuthService, private router: Router, private fb: FormBuilder, private _toastService: ToastService) {
     this.registerForm = this.fb.group({
       username: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
@@ -42,8 +42,21 @@ export class RegisterComponent implements OnInit {
     });
   }
   ngOnInit(): void {
+    this.theme = localStorage.getItem('theme') as any || 'light';
+    this.applyTheme();
     console.log(this.imagePreview);
   }
+
+  toggleTheme() {
+    this.theme = (this.theme === 'light') ? 'dark' : 'light';
+    localStorage.setItem('theme', this.theme);
+    this.applyTheme();
+  }
+
+  applyTheme() {
+    this.renderer.setAttribute(document.documentElement, 'data-bs-theme', this.theme);
+  }
+
 
   onImageSelected(event: Event) {
     const input = event.target as HTMLInputElement;
