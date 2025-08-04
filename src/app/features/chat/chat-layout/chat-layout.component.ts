@@ -31,24 +31,27 @@ export class ChatLayoutComponent implements AfterViewChecked {
   theme: 'light' | 'dark' = 'light';
   users: any;
   privateMessages: any;
+  recentGroupUsers: any;
   user1Data: any;
   user2Data: any;
   textMessage: any;
   chatForm: any = FormGroup
   isSearching = false;
   searchControl = new FormControl('');
-  private destroy$ = new Subject<void>();
   isTyping!: any
   showPicker: any = false
   selectedFile!: any
-  private messageObserver!: IntersectionObserver;
   currentRoomId!: string;
   typingUsers = new Set<string>();
   showSidebarContent: boolean = false;
   filePreviewUrl: string | ArrayBuffer | null = null;
   typingTimeout?: any;
   recentUsersList!: any;
-
+  starredUsers: any[] = [];
+  conversations: any[] = [];
+  private destroy$ = new Subject<void>();
+  starredUserIds = new Set<string>();
+  private messageObserver!: IntersectionObserver;
   constructor(private renderer: Renderer2, private authService: AuthService, private chatService: ChatService, private fb: FormBuilder, private socket: SocketService, private ngZone: NgZone) {
     this.chatForm = this.fb.group({
       text: ['', Validators.required]
@@ -76,8 +79,11 @@ export class ChatLayoutComponent implements AfterViewChecked {
     this.theme = localStorage.getItem('theme') as any || 'light';
     this.applyTheme();
     this.getMe();
-    this.getAllUsers()
+    this.getAllUsers();
     this.getRecentUsersList();
+    this.getRecentGroupUsers();
+    this.getStaredUsers();
+    this.loadConversations()
     this.socket.listen<any>('receivePrivateMessage')
       .subscribe(msg => {
         this.privateMessages.push(msg);
@@ -171,16 +177,35 @@ export class ChatLayoutComponent implements AfterViewChecked {
     this.authService.logout()
   }
 
-  getAllUsers() {
+  getMe() {
+    this.chatService.getMe().subscribe({
+      next: (res: any) => {
+        this.user1Data = res.user
+        console.log('user1Data', this.user1Data);
+      }
+    })
+  }
 
+  getAllUsers() {
     this.chatService.getAllUsers().subscribe({
       next: (res: any) => {
-        const users = res.filter((user: any) => user._id !== this.user1Data._id);
-        this.users = users;
-        console.log('users', this.users);
+        this.users = res;
+        // this.sortUsers(); // Sort after fetching
       },
       error: (err) => {
         console.error('Error fetching users', err);
+      }
+    });
+  }
+
+  getRecentGroupUsers() {
+    this.chatService.getRecentGroupUsers().subscribe({
+      next: (res: any) => {
+        this.recentGroupUsers = res;
+        console.log('recentGroupUsers', this.recentGroupUsers);
+      },
+      error: (err: any) => {
+        console.error('Error fetching recent group users', err);
       }
     });
   }
@@ -199,18 +224,47 @@ export class ChatLayoutComponent implements AfterViewChecked {
     })
   }
 
+  toggleStar(userId: string): void {
+    if (this.starredUserIds.has(userId)) {
+      this.chatService.unstarUser(userId).subscribe({
+        next: () => {
+          this.starredUserIds.delete(userId);
+          this.getAllUsers();
+          this.getStaredUsers();
+        },
+        error: (err) => {
+          console.error('Failed to unstar user', err);
+        }
+      });
+    } else {
+      this.chatService.starUser(userId).subscribe({
+        next: () => {
+          this.starredUserIds.add(userId);
+          this.getAllUsers();
+          this.getStaredUsers();
+        },
+        error: (err) => {
+          console.error('Failed to star user', err);
+        }
+      });
+    }
+  }
+
+  getStaredUsers() {
+    this.chatService.getStarredUsers().subscribe({
+      next: (res: any) => {
+        this.starredUsers = res;
+        console.log('Starred Users:', this.starredUsers);
+      },
+      error: (err: any) => {
+        console.error('Error fetching starred users', err);
+      }
+    });
+  }
+
   getUserImage(senderId: string): string {
     const user = this.users.find((u: any) => u._id === senderId);
     return user.image !== null ? user.image : 'public/images/chat-background.jpg';
-  }
-
-  getMe() {
-    this.chatService.getMe().subscribe({
-      next: (res: any) => {
-        this.user1Data = res.user
-        console.log('user1Data', this.user1Data);
-      }
-    })
   }
 
   extractFileNameWithoutNumbers(fileUrl: string): string {
@@ -311,6 +365,7 @@ export class ChatLayoutComponent implements AfterViewChecked {
         this.currentRoomId = res.roomId;
         this.socket.joinRoom(this.currentRoomId);
         this.loadRoomMessages();
+        // this.sortUsers()
       });
   }
 
@@ -380,6 +435,17 @@ export class ChatLayoutComponent implements AfterViewChecked {
         console.log(err);
       }
     })
+  }
+
+  loadConversations() {
+    this.chatService.getAllConversations().subscribe((conversations) => {
+      const privateChats = conversations.filter(c => c.type === 'private');
+      const groupChats = conversations.filter(c => c.type === 'group');
+      console.log('Private Chats:', privateChats, groupChats);
+
+      this.conversations = [...privateChats, ...groupChats];
+      console.log('Conversations:', this.conversations);
+    });
   }
 
   ngOnDestroy() {

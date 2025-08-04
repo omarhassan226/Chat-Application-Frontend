@@ -72,43 +72,35 @@
     </div> -->
 
     <aside class="col-12 col-md-4 col-sm-12 col-lg-3 border-end" style="height: 100%">
-
       <div class="flex flex-col md:flex-row h-[100vh] border-b p-2">
         <nav
           class="flex md:flex-col items-center md:items-start justify-between space-x-6 md:space-x-0 md:space-y-6 py-2 md:py-4 border-b md:border-b-0 md:border-r border-gray-200 md:w-[48px]">
           <button
             class="relative flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 focus:outline-none">
-            <i class="far fa-comment-dots text-gray-600 text-lg">
-            </i>
+            <i class="far fa-comment-dots text-gray-600 text-lg"> </i>
             <span
-              class="absolute -right-1 -top-1  bg-primary-accent text-white text-[11px] font-semibold rounded-full w-5 h-5 flex items-center justify-center select-none">
+              class="absolute -right-1 -top-1 bg-primary-accent text-white text-[11px] font-semibold rounded-full w-5 h-5 flex items-center justify-center select-none">
               3
             </span>
             <span class="absolute left-0 top-0 w-1 h-6 rounded-r-md bg-primary-accent hidden md:block">
             </span>
           </button>
-          <button class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 focus:outline-none">
-            <i class="fas fa-phone-alt text-gray-600 text-lg">
-            </i>
+          <!-- <button class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 focus:outline-none">
+            <i class="fas fa-phone-alt text-gray-600 text-lg"> </i>
           </button>
           <button class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 focus:outline-none">
-            <i class="far fa-clock text-gray-600 text-lg">
-            </i>
-          </button>
-          <div class="flex-1 hidden md:block">
-          </div>
+            <i class="far fa-clock text-gray-600 text-lg"> </i>
+          </button> -->
+          <div class="flex-1 hidden md:block"></div>
           <button class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 focus:outline-none">
-            <i class="far fa-star text-gray-600 text-lg">
-            </i>
+            <i class="far fa-star text-gray-600 text-lg"> </i>
           </button>
-          <button class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 focus:outline-none">
-            <i class="far fa-trash-alt text-gray-600 text-lg">
-            </i>
-          </button>
-          <button class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 focus:outline-none">
-            <i class="fas fa-cog text-gray-600 text-lg">
-            </i>
-          </button>
+          <!-- <button class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 focus:outline-none">
+            <i class="far fa-trash-alt text-gray-600 text-lg"> </i>
+          </button> -->
+          <!-- <button class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 focus:outline-none">
+            <i class="fas fa-cog text-gray-600 text-lg"> </i>
+          </button> -->
           <!-- <button class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 focus:outline-none">
             <img ngbDropdownToggle alt="User profile image of a man with short hair and beard, smiling"
               class="rounded-full" height="40" [src]="user1Data.image" width="40">
@@ -117,22 +109,22 @@
             <button
               class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 focus:outline-none">
               <img ngbDropdownToggle alt="User profile image of a man with short hair and beard, smiling"
-                class="rounded-full" [src]="user1Data.image" style="width: 40px; height: 40px;">
+                class="rounded-full" [src]="user1Data.image" style="width: 40px; height: 40px" />
             </button>
             <ul ngbDropdownMenu class="dropdown-menu dropdown-menu-end" [attr.data-bs-theme]="theme">
-              <li>
+              <!-- <li>
                 <button class="dropdown-item">
                   <i class="fas fa-cog me-2"></i>Settings
                 </button>
-              </li>
+              </li> -->
               <li>
                 <button class="dropdown-item d-flex justify-content-between align-items-center" (click)="toggleTheme()">
                   <span><i class="fas" [ngClass]="theme === 'light' ? 'fa-moon' : 'fa-sun'"></i>
                     {{ theme === "light" ? "Dark Mode" : "Light Mode" }}
                   </span>
                   <i class="fas" [ngClass]="
-                                      theme === 'light' ? 'fa-toggle-off' : 'fa-toggle-on'
-                                    "></i>
+                      theme === 'light' ? 'fa-toggle-off' : 'fa-toggle-on'
+                    "></i>
                 </button>
               </li>
               <li>
@@ -149,66 +141,69 @@
 
         <section class="flex-1 flex flex-col border-t md:border-t-0 md:border-l border-gray-200 min-w-0">
           <header class="flex items-center justify-between px-4 py-3 border-b border-gray-200" style="min-height: 56px">
-            <h2 class="text-lg font-semibold select-text"
-              [ngClass]="{'text-gray-200': theme === 'dark', 'text-gray-700': theme === 'light'}">
+            <h2 class="text-lg font-semibold select-text" [ngClass]="{
+                'text-gray-200': theme === 'dark',
+                'text-gray-700': theme === 'light'
+              }">
               Chats
             </h2>
             <div class="flex items-center space-x-3 text-gray-600 text-[15px]">
               <button class="hover:bg-gray-100 p-1 rounded-md focus:outline-none">
-                <i class="far fa-edit">
-                </i>
+                <i class="far fa-edit"> </i>
               </button>
               <button class="hover:bg-gray-100 p-1 rounded-md focus:outline-none">
-                <i class="fas fa-filter">
-                </i>
+                <i class="fas fa-filter"> </i>
               </button>
             </div>
           </header>
 
           <div class="px-4 py-2 border-b border-gray-200">
             <div class="relative">
-              <input [ngClass]="{'text-gray-200': theme === 'dark', 'text-gray-700': theme === 'light'}"
-                class="w-full border border-gray-300 rounded-md py-2 pl-3 pr-10 text-sm  placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#25D366] focus:border-[#25D366]"
-                placeholder="Search or start new chat" type="search" [formControl]="searchControl">
+              <input [ngClass]="{
+                  'text-gray-200': theme === 'dark',
+                  'text-gray-700': theme === 'light'
+                }"
+                class="w-full border border-gray-300 rounded-md py-2 pl-3 pr-10 text-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#25D366] focus:border-[#25D366]"
+                placeholder="Search or start new chat" type="search" [formControl]="searchControl" />
               <i
                 class="fas fa-search absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none">
               </i>
             </div>
           </div>
 
-          <ul class="overflow-y-auto flex-1 divide-y divide-gray-100" id="chat-list"
-            style="scrollbar-width: thin; scrollbar-color: #cbd5e1 transparent; min-width: 0;">
-
+          <ul class="overflow-y-auto flex-1 divide-y divide-gray-100" id="chat-list" style="
+              scrollbar-width: thin;
+              scrollbar-color: #cbd5e1 transparent;
+              min-width: 0;
+            ">
             <li class="flex items-center px-4 py-3 cursor-pointer hover:bg-gray-50 select-text" tabindex="0"
               (click)="getUser(user._id)" *ngFor="let user of users">
-              <img alt="Portrait photo of Maya Kasuma, a woman with long black hair and glasses"
-                class="w-10 h-10 rounded-full object-cover"
-                [src]="   user.image ||
-                          'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg'">
+              <img alt="User" class="w-10 h-10 rounded-full object-cover" [src]="
+                  user.image ||
+                  'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg'
+                " />
               <div class="flex-1 ml-3 min-w-0">
-                <p class="text-sm font-semibold truncate"
-                  [ngClass]="{'text-gray-200': theme === 'dark', 'text-gray-700': theme === 'light'}">
+                <p class="text-sm font-semibold truncate" [ngClass]="{
+                    'text-gray-200': theme === 'dark',
+                    'text-gray-700': theme === 'light'
+                  }">
                   {{ user.username }}
                 </p>
-                <!-- <p class="text-xs text-gray-500 truncate max-w-[180px]">
-                  Yes! OK
-                </p> -->
-                <div class="typing-bubble-list" style="font-size: small;">
+                <div class="typing-bubble-list" style="font-size: small">
                   <div>
-                    {{
-                    typingUsers.has(user._id)
-                    ? "Typing..."
-                    : 'Yes! ok'
-                    }}
+                    {{ typingUsers.has(user._id) ? "Typing..." : "Yes! ok" }}
                   </div>
                 </div>
               </div>
               <div class="flex flex-col items-end space-y-1">
-                <span class="text-xs text-gray-400">
-                  14:54
-                </span>
-                <button class="text-gray-300 hover:text-gray-500 focus:outline-none">
-                  <i class="far fa-star">
+                <span class="text-xs text-gray-400"> 14:54 </span>
+                <button class="text-gray-300 hover:text-gray-500 focus:outline-none"
+                  (click)="toggleStar(user._id); $event.stopPropagation()">
+                  <i class="far fa-star" [ngClass]="{
+                      'fas text-yellow-400': starredUserIds.has(user._id) || user.isStarred,
+                      'far text-gray-300 hover:text-gray-500':
+                        !starredUserIds.has(user._id)
+                    }">
                   </i>
                 </button>
               </div>
@@ -307,16 +302,14 @@
           </ul>
         </section>
       </div>
-
     </aside>
 
     <!-- Chat -->
     <div *ngIf="user2Data" class="col-12 col-md-8 col-lg-9 d-flex flex-column" style="height: 100%">
-
       <div class="d-flex align-items-center justify-content-between p-3 border-bottom">
         <div class="d-flex align-items-center">
           <img [src]="user2Data?.image || 'assets/images/default-user.jpg'" class="rounded-circle me-2"
-            style="width: 45px; height:45px;" alt="Chat User" />
+            style="width: 45px; height: 45px" alt="Chat User" />
           <div>
             <div class="fw-bold">
               {{ user2Data?.username || "Select a chat" }}
@@ -443,7 +436,7 @@
           <div class="d-flex align-items-center gap-2">
             <ng-container>
               <img [src]="filePreviewUrl" alt="preview" class="img-thumbnail"
-                style="max-width: 100px; max-height: 100px;" />
+                style="max-width: 100px; max-height: 100px" />
             </ng-container>
 
             <ng-container>

@@ -80,10 +80,31 @@ export class ChatService {
     return this.http.get<Message[]>(`${this.base}/private/recent-users`).pipe(catchError(this.handleErr));
   }
 
+  getRecentGroupUsers(): Observable<Message[]> {
+    return this.http.get<Message[]>(`${this.base}/group/recent-users`).pipe(catchError(this.handleErr));
+  }
+
   createOrGetRoom(memberIds: string[]): Observable<{ roomId: string }> {
     return this.http
       .post<{ roomId: string }>(`${this.base}/create-room`, { memberIds })
       .pipe(catchError(this.handleErr));
   }
+
+  starUser(userId: string) {
+    return this.http.post(`${this.base}/star-user/${userId}`, {});
+  }
+
+  unstarUser(userId: string) {
+    return this.http.delete(`${this.base}/star-user/${userId}`);
+  }
+
+  getStarredUsers() {
+    return this.http.get<User[]>(`${this.base}/starred-users`);
+  }
+
+  getAllConversations() {
+    return this.http.get<any[]>(`${this.base}/messages/all-conversations`);
+  }
+
 
 }
