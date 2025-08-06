@@ -80,7 +80,7 @@
             <i class="far fa-comment-dots text-gray-600 text-lg"> </i>
             <span
               class="absolute -right-1 -top-1 bg-primary-accent text-white text-[11px] font-semibold rounded-full w-5 h-5 flex items-center justify-center select-none">
-              3
+              {{users.length}}
             </span>
             <span class="absolute left-0 top-0 w-1 h-6 rounded-r-md bg-primary-accent hidden md:block">
             </span>
@@ -92,8 +92,10 @@
             <i class="far fa-clock text-gray-600 text-lg"> </i>
           </button> -->
           <div class="flex-1 hidden md:block"></div>
-          <button class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 focus:outline-none">
-            <i class="far fa-star text-gray-600 text-lg"> </i>
+          <button (click)="toggleStarredUsers()"
+            class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 focus:outline-none">
+            <i
+              class="{{ this.starredUsers.length > 0 ? 'fas fa-star text-yellow-400' : 'far fa-star text-gray-300 hover:text-gray-500' }}"></i>
           </button>
           <!-- <button class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 focus:outline-none">
             <i class="far fa-trash-alt text-gray-600 text-lg"> </i>
@@ -171,7 +173,7 @@
             </div>
           </div>
 
-          <ul class="overflow-y-auto flex-1 divide-y divide-gray-100" id="chat-list" style="
+          <ul *ngIf="!isStaredUsers" class="overflow-y-auto flex-1 divide-y divide-gray-100" id="chat-list" style="
               scrollbar-width: thin;
               scrollbar-color: #cbd5e1 transparent;
               min-width: 0;
@@ -299,6 +301,45 @@
                 </span>
               </div>
             </li> -->
+          </ul>
+
+          <ul *ngIf="isStaredUsers" class="overflow-y-auto flex-1 divide-y divide-gray-100" id="chat-list" style="
+                                  scrollbar-width: thin;
+                                  scrollbar-color: #cbd5e1 transparent;
+                                  min-width: 0;
+                                ">
+            <li class="flex items-center px-4 py-3 cursor-pointer hover:bg-gray-50 select-text" tabindex="0"
+              (click)="getUser(user._id)" *ngFor="let user of starredUsers">
+              <img alt="User" class="w-10 h-10 rounded-full object-cover" [src]="
+                                      user.image ||
+                                      'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg'
+                                    " />
+              <div class="flex-1 ml-3 min-w-0">
+                <p class="text-sm font-semibold truncate" [ngClass]="{
+                                        'text-gray-200': theme === 'dark',
+                                        'text-gray-700': theme === 'light'
+                                      }">
+                  {{ user.username }}
+                </p>
+                <div class="typing-bubble-list" style="font-size: small">
+                  <div>
+                    {{ typingUsers.has(user._id) ? "Typing..." : "Yes! ok" }}
+                  </div>
+                </div>
+              </div>
+              <div class="flex flex-col items-end space-y-1">
+                <span class="text-xs text-gray-400"> 14:54 </span>
+                <button class="text-gray-300 hover:text-gray-500 focus:outline-none"
+                  (click)="toggleStar(user._id); $event.stopPropagation()">
+                  <i class="far fa-star" [ngClass]="{
+                                          'fas text-yellow-400': starredUserIds.has(user._id) || user.isStarred,
+                                          'far text-gray-300 hover:text-gray-500':
+                                            !starredUserIds.has(user._id)
+                                        }">
+                  </i>
+                </button>
+              </div>
+            </li>
           </ul>
         </section>
       </div>

@@ -49,6 +49,7 @@ export class ChatLayoutComponent implements AfterViewChecked {
   recentUsersList!: any;
   starredUsers: any[] = [];
   conversations: any[] = [];
+  isStaredUsers: boolean = false;
   private destroy$ = new Subject<void>();
   starredUserIds = new Set<string>();
   private messageObserver!: IntersectionObserver;
@@ -84,6 +85,7 @@ export class ChatLayoutComponent implements AfterViewChecked {
     this.getRecentGroupUsers();
     this.getStaredUsers();
     this.loadConversations()
+    this.getStaredUsers();
     this.socket.listen<any>('receivePrivateMessage')
       .subscribe(msg => {
         this.privateMessages.push(msg);
@@ -446,6 +448,26 @@ export class ChatLayoutComponent implements AfterViewChecked {
       this.conversations = [...privateChats, ...groupChats];
       console.log('Conversations:', this.conversations);
     });
+  }
+
+  getStarList() {
+    this.chatService.getStarredUsers().subscribe({
+      next: (res: any) => {
+        this.starredUsers = res;
+      },
+      error: (err: any) => {
+        console.error('Error fetching starred users', err);
+      }
+    });
+  }
+
+  toggleStarredUsers() {
+    this.isStaredUsers = !this.isStaredUsers;
+    if (this.starredUsers.length > 0) {
+      this.getStarList();
+    } else {
+      this.starredUsers = [];
+    }
   }
 
   ngOnDestroy() {
