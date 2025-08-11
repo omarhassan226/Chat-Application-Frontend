@@ -4,49 +4,123 @@
       <mat-card-title>Sinup</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-
       <div class="image-upload-container">
-        <button mat-raised-button color="primary" (click)="fileInput.click()" class="choose-file-btn">
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="fileInput.click()"
+          class="choose-file-btn"
+        >
           Choose File
         </button>
-        <input type="file" id="file" hidden (change)="onImageSelected($event)" #fileInput />
+        <input
+          type="file"
+          id="file"
+          hidden
+          (change)="onImageSelected($event)"
+          #fileInput
+        />
         <div class="image-preview-wrapper" *ngIf="imageFile">
           <img [src]="imagePreview" alt="Image Preview" class="image-preview" />
-          <button mat-icon-button (click)="removeImage()" class="remove-image-btn">
+          <button
+            mat-icon-button
+            (click)="removeImage()"
+            class="remove-image-btn"
+          >
             <mat-icon>close</mat-icon>
           </button>
         </div>
       </div>
 
-
-
       <form [formGroup]="registerForm" (ngSubmit)="register()">
+        <!-- Email -->
+        <mat-form-field appearance="fill">
+          <mat-label>Email</mat-label>
+          <input
+            matInput
+            type="email"
+            formControlName="email"
+            placeholder="Enter your email"
+          />
+          <mat-error *ngIf="registerForm.get('email')?.hasError('required')"
+            >Email is required</mat-error
+          >
+          <mat-error *ngIf="registerForm.get('email')?.hasError('email')"
+            >Invalid email format</mat-error
+          >
+        </mat-form-field>
+
+        <!-- Phone -->
+        <mat-form-field appearance="fill">
+          <mat-label>Phone</mat-label>
+          <input
+            matInput
+            type="tel"
+            formControlName="phone"
+            placeholder="Enter your phone number"
+          />
+          <mat-error *ngIf="registerForm.get('phone')?.hasError('required')"
+            >Phone is required</mat-error
+          >
+          <mat-error *ngIf="registerForm.get('phone')?.hasError('pattern')"
+            >Invalid phone number</mat-error
+          >
+        </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Username</mat-label>
-          <input matInput formControlName="username" placeholder="Enter your username">
-          <mat-error *ngIf="registerForm.get('username')?.hasError('required')">Username is required</mat-error>
-          <mat-error *ngIf="registerForm.get('username')?.hasError('username')">Please enter a valid
-            username</mat-error>
+          <input
+            matInput
+            formControlName="username"
+            placeholder="Enter your username"
+          />
+          <mat-error *ngIf="registerForm.get('username')?.hasError('required')"
+            >Username is required</mat-error
+          >
+          <mat-error *ngIf="registerForm.get('username')?.hasError('username')"
+            >Please enter a valid username</mat-error
+          >
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Password</mat-label>
-          <input matInput type="password" formControlName="password" placeholder="Enter your password">
-          <mat-error *ngIf="registerForm.get('password')?.hasError('required')">Password is required</mat-error>
-          <mat-error *ngIf="registerForm.get('password')?.hasError('minlength')">Password must be at least 8 characters
-            long</mat-error>
+          <input
+            matInput
+            type="password"
+            formControlName="password"
+            placeholder="Enter your password"
+          />
+          <mat-error *ngIf="registerForm.get('password')?.hasError('required')"
+            >Password is required</mat-error
+          >
+          <mat-error *ngIf="registerForm.get('password')?.hasError('minlength')"
+            >Password must be at least 8 characters long</mat-error
+          >
         </mat-form-field>
 
-        <button mat-raised-button class="login-button" color="primary" type="submit"
-          [disabled]="registerForm.invalid">Signup</button>
-        <button mat-raised-button class="login-button" color="primary" type="button" (click)="goToLogin()">Have an
-          account? Login</button>
-
+        <button
+          mat-raised-button
+          class="login-button"
+          color="primary"
+          type="submit"
+          [disabled]="registerForm.invalid"
+        >
+          Signup
+        </button>
+        <button
+          mat-raised-button
+          class="login-button"
+          color="primary"
+          type="button"
+          (click)="goToLogin()"
+        >
+          Have an account? Login
+        </button>
       </form>
     </mat-card-content>
   </mat-card>
 </div>
 
-
-<lib-toastify-toast-container [position]="'top-right'"></lib-toastify-toast-container>
+<lib-toastify-toast-container
+  [position]="'top-right'"
+></lib-toastify-toast-container>

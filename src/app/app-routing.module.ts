@@ -2,28 +2,27 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'chat', pathMatch: 'full' },   // ✅ default redirect
+  { path: '', redirectTo: 'chat', pathMatch: 'full' },
   {
     path: '',
     loadChildren: () =>
-      import('./shared/shared.module').then(m => m.SharedModule)
+      import('./shared/shared.module').then((m) => m.SharedModule),
   },
   {
     path: 'auth',
     loadChildren: () =>
-      import('./features/auth/auth.module').then(m => m.AuthModule)
+      import('./features/auth/auth.module').then((m) => m.AuthModule),
   },
   {
     path: 'chat',
     loadChildren: () =>
-      import('./features/chat/chat.module').then(m => m.ChatModule)
+      import('./features/chat/chat.module').then((m) => m.ChatModule),
   },
-  { path: '**', redirectTo: 'chat' }  // optional: catch-all rule
+  { path: '**', redirectTo: 'chat' },
 ];
-
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

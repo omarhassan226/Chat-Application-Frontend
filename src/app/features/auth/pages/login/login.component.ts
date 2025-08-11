@@ -14,23 +14,30 @@ import { ToastService } from 'angular-toastify';
     trigger('fadeIn', [
       transition(':enter', [
         style({ opacity: 0, transform: 'translateY(20px)' }),
-        animate('400ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
-      ])
-    ])
+        animate(
+          '400ms ease-out',
+          style({ opacity: 1, transform: 'translateY(0)' })
+        ),
+      ]),
+    ]),
   ],
 })
 export class LoginComponent {
-
   loginForm!: FormGroup;
   errorMessage: string = '';
   isLoading: boolean = false;
   isLoggedIn: boolean = false;
   showPassword = false;
 
-  constructor(private authService: AuthService, private router: Router, private fb: FormBuilder, private toastService: ToastService) {
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private fb: FormBuilder,
+    private toastService: ToastService
+  ) {
     this.loginForm = this.fb.group({
       username: [''],
-      password: ['']
+      password: [''],
     });
   }
 
@@ -46,13 +53,13 @@ export class LoginComponent {
         this.isLoading = false;
         setTimeout(() => {
           this.router.navigate(['/chat']);
-        }, 1500);
+        }, 0);
       },
       error: (error: any) => {
         this.toastService.error('Login failed');
         console.log(error);
         this.isLoading = false;
-      }
+      },
     });
   }
 
@@ -64,4 +71,3 @@ export class LoginComponent {
     this.showPassword = !this.showPassword;
   }
 }
-

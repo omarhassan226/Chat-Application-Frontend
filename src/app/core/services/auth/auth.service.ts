@@ -1,23 +1,22 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { apiUrls } from '../../constant/api\'s';
+import { apiUrls } from "../../constant/api's";
 import { Router } from '@angular/router';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
+  constructor(private http: HttpClient, private router: Router) {}
 
-  constructor(private http: HttpClient, private router: Router) { }
+  tokenKey: any = 'token';
 
-  tokenKey:any = 'token'
-
-  login(body:any) {
+  login(body: any) {
     return this.http.post(`${environment.apiUrl}${apiUrls.login}`, body);
   }
 
-  register(body:any) {
+  register(body: any) {
     return this.http.post(`${environment.apiUrl}${apiUrls.register}`, body);
   }
 
@@ -27,13 +26,10 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem(this.tokenKey);
-    // this.isLogin.next(false);
-    // this.user.next(null);
-    this.router.navigate(['/auth/login'])
+    this.router.navigate(['/auth/login']);
   }
 
-
-    isAuthenticated(): boolean {
+  isAuthenticated(): boolean {
     const token = localStorage.getItem(this.tokenKey);
     return !!token;
   }

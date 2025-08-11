@@ -36,12 +36,10 @@ section.vh-100 {
   overflow-y: auto;
 }
 
-/* Keep input form at bottom without flex-grow */
 .border-top {
   flex: none;
 }
 
-//Type indicator
 
 .typing-bubble {
   display: inline-block;
@@ -52,7 +50,6 @@ section.vh-100 {
   gap: 8px;
   padding: 10px 16px;
   background: #e0d4ff;
-  /* light purple bubble */
   border-radius: 18px;
   margin: 8px 0;
   animation: bubble-pulse 2s ease-in-out infinite;
@@ -67,7 +64,6 @@ section.vh-100 {
   width: 8px;
   height: 8px;
   background: #6b46c1;
-  /* rich purple */
   border-radius: 50%;
   opacity: 0.4;
   animation: dot-bounce 1s infinite ease-in-out;
@@ -85,7 +81,6 @@ section.vh-100 {
   animation-delay: 0.4s;
 }
 
-/* Animation: bubble subtle pulsing */
 @keyframes bubble-pulse {
 
   0%,
@@ -98,7 +93,6 @@ section.vh-100 {
   }
 }
 
-/* Animation: dots bounce & fade in/out */
 @keyframes dot-bounce {
 
   0%,
@@ -113,8 +107,6 @@ section.vh-100 {
     opacity: 1;
   }
 }
-
-//if not user selected
 
 .feature-box {
   display: flex;
@@ -133,16 +125,13 @@ section.vh-100 {
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
 }
 
-/* Container */
 .typing-bubble-list {
   display: flex;
   align-items: center;
   padding: 4px 12px;
   border-radius: 12px;
   background-color: #e6f9e6;
-  /* very light green background */
   color: #2e7d32;
-  /* deep green text */
   max-width: fit-content;
 }
 
@@ -152,9 +141,7 @@ section.vh-100 {
   padding: 4px 10px;
   border-radius: 12px;
   background: #e6f9e6;
-  /* light green bg */
   color: #2e7d32;
-  /* dark green text */
   font-size: 0.85em;
   max-width: fit-content;
 }
@@ -209,17 +196,8 @@ section.vh-100 {
   transition: 0.2s ease;
 }
 
-// .sidebar-content {
-//   max-height: 0;
-//   // overflow: hidden;
-//   opacity: 0;
-//   transform: translateX(-100%);
-//   transition: all 0.4s ease-in-out;
-// }
-
 .sidebar-content.show {
   max-height: 100%;
-  /* Adjust as needed */
   opacity: 1;
   transform: translateX(0);
 }

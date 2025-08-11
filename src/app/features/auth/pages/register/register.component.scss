@@ -3,7 +3,6 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  // background: linear-gradient(135deg, #ffe3e3, #ffd3d3);
 }
 
 .login-card {
@@ -16,10 +15,6 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   will-change: opacity, transform;
 }
-// .login-card:hover {
-//   transform: translateY(-4px);
-//   box-shadow: 0 12px 36px rgba(165, 42, 42, 0.3);
-// }
 
 mat-card-title {
   text-align: center;
@@ -116,4 +111,12 @@ button:hover:not(:disabled) {
     bottom: 5px;
   }
 }
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+  margin-top: 12px;
+}
+
 
