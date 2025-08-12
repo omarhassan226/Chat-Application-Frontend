@@ -106,5 +106,8 @@ export class ChatService {
     return this.http.get<any[]>(`${this.base}/messages/all-conversations`);
   }
 
+  getAllMessages(roomId: string) {
+    return this.http.get<Message[]>(`${this.base}/room/${roomId}/users-with-messages`);
+  }
 
 }

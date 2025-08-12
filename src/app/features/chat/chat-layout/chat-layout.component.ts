@@ -50,6 +50,7 @@ export class ChatLayoutComponent implements AfterViewChecked {
   starredUsers: any[] = [];
   conversations: any[] = [];
   isStaredUsers: boolean = false;
+  allMessages!: any;
   private destroy$ = new Subject<void>();
   starredUserIds = new Set<string>();
   private messageObserver!: IntersectionObserver;
@@ -374,6 +375,9 @@ export class ChatLayoutComponent implements AfterViewChecked {
   loadRoomMessages() {
     this.chatService.getRoomMessages(this.currentRoomId)
       .subscribe(msgs => this.privateMessages = msgs);
+
+    this.getAllMessages(this.currentRoomId);
+
   }
 
   sendMessage() {
@@ -446,6 +450,11 @@ export class ChatLayoutComponent implements AfterViewChecked {
       console.log('Private Chats:', privateChats, groupChats);
 
       this.conversations = [...privateChats, ...groupChats];
+
+      this.conversations = [...privateChats, ...groupChats].sort((a, b) =>
+        new Date(b.lastMessageTime).getTime() - new Date(a.lastMessageTime).getTime()
+      );
+
       console.log('Conversations:', this.conversations);
     });
   }
@@ -468,6 +477,18 @@ export class ChatLayoutComponent implements AfterViewChecked {
     } else {
       this.starredUsers = [];
     }
+  }
+
+  getAllMessages(roomId: string) {
+    this.chatService.getAllMessages(roomId).subscribe({
+      next: (messages: any) => {
+        this.allMessages = messages;
+        console.log('All Messages:', this.allMessages);
+      },
+      error: (err: any) => {
+        console.error('Error fetching messages', err);
+      }
+    });
   }
 
   ngOnDestroy() {
