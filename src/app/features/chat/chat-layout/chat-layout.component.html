@@ -71,18 +71,26 @@
       </div>
     </div> -->
 
-    <aside class="col-12 col-md-4 col-sm-12 col-lg-3 border-end" style="height: 100%">
+    <aside
+      class="col-12 col-md-4 col-sm-12 col-lg-3 border-end"
+      style="height: 100%"
+    >
       <div class="flex flex-col md:flex-row h-[100vh] border-b p-2">
         <nav
-          class="flex md:flex-col items-center md:items-start justify-between space-x-6 md:space-x-0 md:space-y-6 py-2 md:py-4 border-b md:border-b-0 md:border-r border-gray-200 md:w-[48px]">
+          class="flex md:flex-col items-center md:items-start justify-between space-x-6 md:space-x-0 md:space-y-6 py-2 md:py-4 border-b md:border-b-0 md:border-r border-gray-200 md:w-[48px]"
+        >
           <button
-            class="relative flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 focus:outline-none">
+            class="relative flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 focus:outline-none"
+          >
             <i class="far fa-comment-dots text-gray-600 text-lg"> </i>
             <span
-              class="absolute -right-1 -top-1 bg-primary-accent text-white text-[11px] font-semibold rounded-full w-5 h-5 flex items-center justify-center select-none">
+              class="absolute -right-1 -top-1 bg-primary-accent text-white text-[11px] font-semibold rounded-full w-5 h-5 flex items-center justify-center select-none"
+            >
               {{ users.length }}
             </span>
-            <span class="absolute left-0 top-0 w-1 h-6 rounded-r-md bg-primary-accent hidden md:block">
+            <span
+              class="absolute left-0 top-0 w-1 h-6 rounded-r-md bg-primary-accent hidden md:block"
+            >
             </span>
           </button>
           <!-- <button class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 focus:outline-none">
@@ -92,13 +100,17 @@
             <i class="far fa-clock text-gray-600 text-lg"> </i>
           </button> -->
           <div class="flex-1 hidden md:block"></div>
-          <button (click)="toggleStarredUsers()"
-            class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 focus:outline-none">
-            <i class="{{
+          <button
+            (click)="toggleStarredUsers()"
+            class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 focus:outline-none"
+          >
+            <i
+              class="{{
                 this.starredUsers.length > 0
                   ? 'fas fa-star text-yellow-400'
                   : 'far fa-star text-gray-300 hover:text-gray-500'
-              }}"></i>
+              }}"
+            ></i>
           </button>
           <!-- <button class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 focus:outline-none">
             <i class="far fa-trash-alt text-gray-600 text-lg"> </i>
@@ -112,24 +124,44 @@
           </button> -->
           <div ngbDropdown class="dropdown">
             <button
-              class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 focus:outline-none">
-              <img ngbDropdownToggle alt="User profile image of a man with short hair and beard, smiling"
-                class="rounded-full" [src]="user1Data.image" style="width: 40px; height: 40px" />
+              class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 focus:outline-none"
+            >
+              <img
+                ngbDropdownToggle
+                alt="User profile image of a man with short hair and beard, smiling"
+                class="rounded-full"
+                [src]="user1Data.image"
+                style="width: 40px; height: 40px"
+              />
             </button>
-            <ul ngbDropdownMenu class="dropdown-menu dropdown-menu-end" [attr.data-bs-theme]="theme">
+            <ul
+              ngbDropdownMenu
+              class="dropdown-menu dropdown-menu-end"
+              [attr.data-bs-theme]="theme"
+            >
               <!-- <li>
                 <button class="dropdown-item">
                   <i class="fas fa-cog me-2"></i>Settings
                 </button>
               </li> -->
               <li>
-                <button class="dropdown-item d-flex justify-content-between align-items-center" (click)="toggleTheme()">
-                  <span><i class="fas" [ngClass]="theme === 'light' ? 'fa-moon' : 'fa-sun'"></i>
+                <button
+                  class="dropdown-item d-flex justify-content-between align-items-center"
+                  (click)="toggleTheme()"
+                >
+                  <span
+                    ><i
+                      class="fas"
+                      [ngClass]="theme === 'light' ? 'fa-moon' : 'fa-sun'"
+                    ></i>
                     {{ theme === "light" ? "Dark Mode" : "Light Mode" }}
                   </span>
-                  <i class="fas" [ngClass]="
+                  <i
+                    class="fas"
+                    [ngClass]="
                       theme === 'light' ? 'fa-toggle-off' : 'fa-toggle-on'
-                    "></i>
+                    "
+                  ></i>
                 </button>
               </li>
               <li>
@@ -144,19 +176,31 @@
           </div>
         </nav>
 
-        <section class="flex-1 flex flex-col border-t md:border-t-0 md:border-l border-gray-200 min-w-0">
-          <header class="flex items-center justify-between px-4 py-3 border-b border-gray-200" style="min-height: 56px">
-            <h2 class="text-lg font-semibold select-text" [ngClass]="{
+        <section
+          class="flex-1 flex flex-col border-t md:border-t-0 md:border-l border-gray-200 min-w-0"
+        >
+          <header
+            class="flex items-center justify-between px-4 py-3 border-b border-gray-200"
+            style="min-height: 56px"
+          >
+            <h2
+              class="text-lg font-semibold select-text"
+              [ngClass]="{
                 'text-gray-200': theme === 'dark',
                 'text-gray-700': theme === 'light'
-              }">
+              }"
+            >
               Chats
             </h2>
             <div class="flex items-center space-x-3 text-gray-600 text-[15px]">
-              <button class="hover:bg-gray-100 p-1 rounded-md focus:outline-none">
+              <button
+                class="hover:bg-gray-100 p-1 rounded-md focus:outline-none"
+              >
                 <i class="far fa-edit"> </i>
               </button>
-              <button class="hover:bg-gray-100 p-1 rounded-md focus:outline-none">
+              <button
+                class="hover:bg-gray-100 p-1 rounded-md focus:outline-none"
+              >
                 <i class="fas fa-filter"> </i>
               </button>
             </div>
@@ -164,57 +208,89 @@
 
           <div class="px-4 py-2 border-b border-gray-200">
             <div class="relative">
-              <input [ngClass]="{
+              <input
+                [ngClass]="{
                   'text-gray-200': theme === 'dark',
                   'text-gray-700': theme === 'light'
                 }"
                 class="w-full border border-gray-300 rounded-md py-2 pl-3 pr-10 text-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-[#25D366] focus:border-[#25D366]"
-                placeholder="Search or start new chat" type="search" [formControl]="searchControl" />
+                placeholder="Search or start new chat"
+                type="search"
+                [formControl]="searchControl"
+              />
               <i
-                class="fas fa-search absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none">
+                class="fas fa-search absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none"
+              >
               </i>
             </div>
           </div>
 
-          <ul *ngIf="!isStaredUsers" class="overflow-y-auto flex-1 divide-y divide-gray-100" id="chat-list" style="
+          <ul
+            *ngIf="!isStaredUsers"
+            class="overflow-y-auto flex-1 divide-y divide-gray-100"
+            id="chat-list"
+            style="
               scrollbar-width: thin;
               scrollbar-color: #cbd5e1 transparent;
               min-width: 0;
-            ">
-            <li class="flex items-center px-4 py-3 cursor-pointer hover:bg-gray-50 select-text" tabindex="0"
-              (click)="getUser(user._id)" *ngFor="let user of users">
-              <img alt="User" class="w-10 h-10 rounded-full object-cover" [src]="
-                  user.image ||
+            "
+          >
+            <li
+              class="flex items-center px-4 py-3 cursor-pointer hover:bg-gray-50 select-text"
+              tabindex="0"
+              (click)="getUser(user?._id)"
+              *ngFor="let user of users"
+            >
+              <img
+                alt="User"
+                class="w-10 h-10 rounded-full object-cover"
+                [src]="
+                  user?.image ||
                   'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg'
-                " />
+                "
+              />
               <div class="flex-1 ml-3 min-w-0">
-                <p class="text-sm font-semibold truncate" [ngClass]="{
+                <p
+                  class="text-sm font-semibold truncate"
+                  [ngClass]="{
                     'text-gray-200': theme === 'dark',
                     'text-gray-700': theme === 'light'
-                  }">
-                  {{ user.username }}
+                  }"
+                >
+                  {{ user?.username }}
                 </p>
                 <div style="font-size: small">
-                  <div [ngClass]="{
-                      'typing-bubble': typingUsers.has(user._id),
-                      'default-text': !typingUsers.has(user._id)
-                    }">
-                    {{ typingUsers.has(user._id) ? "Typing..." : "Yes! ok" }}
+                  <div
+                    [ngClass]="{
+                      'typing-bubble': typingUsers.has(user?._id),
+                      'default-text': !typingUsers.has(user?._id)
+                    }"
+                  >
+                    {{
+                      typingUsers.has(user?._id)
+                        ? "Typing..."
+                        : user?.lastMessage?.text || ""
+                    }}
                   </div>
                 </div>
               </div>
               <div class="flex flex-col items-end space-y-1">
                 <span class="text-xs text-gray-400">
-                  {{ user.lastSeen | date : "HH:mm" }}
+                  {{ user?.lastSeen | date : "HH:mm" }}
                 </span>
-                <button class="text-gray-300 hover:text-gray-500 focus:outline-none"
-                  (click)="toggleStar(user._id); $event.stopPropagation()">
-                  <i class="far fa-star" [ngClass]="{
+                <button
+                  class="text-gray-300 hover:text-gray-500 focus:outline-none"
+                  (click)="toggleStar(user?._id); $event.stopPropagation()"
+                >
+                  <i
+                    class="far fa-star"
+                    [ngClass]="{
                       'fas text-yellow-400':
-                        starredUserIds.has(user._id) || user.isStarred,
+                        starredUserIds.has(user?._id) || user.isStarred,
                       'far text-gray-300 hover:text-gray-500':
-                        !starredUserIds.has(user._id)
-                    }">
+                        !starredUserIds.has(user?._id)
+                    }"
+                  >
                   </i>
                 </button>
               </div>
@@ -312,22 +388,38 @@
             </li> -->
           </ul>
 
-          <ul *ngIf="isStaredUsers" class="overflow-y-auto flex-1 divide-y divide-gray-100" id="chat-list" style="
+          <ul
+            *ngIf="isStaredUsers"
+            class="overflow-y-auto flex-1 divide-y divide-gray-100"
+            id="chat-list"
+            style="
               scrollbar-width: thin;
               scrollbar-color: #cbd5e1 transparent;
               min-width: 0;
-            ">
-            <li class="flex items-center px-4 py-3 cursor-pointer hover:bg-gray-50 select-text" tabindex="0"
-              (click)="getUser(user._id)" *ngFor="let user of starredUsers">
-              <img alt="User" class="w-10 h-10 rounded-full object-cover" [src]="
+            "
+          >
+            <li
+              class="flex items-center px-4 py-3 cursor-pointer hover:bg-gray-50 select-text"
+              tabindex="0"
+              (click)="getUser(user._id)"
+              *ngFor="let user of starredUsers"
+            >
+              <img
+                alt="User"
+                class="w-10 h-10 rounded-full object-cover"
+                [src]="
                   user.image ||
                   'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg'
-                " />
+                "
+              />
               <div class="flex-1 ml-3 min-w-0">
-                <p class="text-sm font-semibold truncate" [ngClass]="{
+                <p
+                  class="text-sm font-semibold truncate"
+                  [ngClass]="{
                     'text-gray-200': theme === 'dark',
                     'text-gray-700': theme === 'light'
-                  }">
+                  }"
+                >
                   {{ user.username }}
                 </p>
                 <div class="typing-bubble-list" style="font-size: small">
@@ -338,14 +430,19 @@
               </div>
               <div class="flex flex-col items-end space-y-1">
                 <span class="text-xs text-gray-400"> 14:54 </span>
-                <button class="text-gray-300 hover:text-gray-500 focus:outline-none"
-                  (click)="toggleStar(user._id); $event.stopPropagation()">
-                  <i class="far fa-star" [ngClass]="{
+                <button
+                  class="text-gray-300 hover:text-gray-500 focus:outline-none"
+                  (click)="toggleStar(user._id); $event.stopPropagation()"
+                >
+                  <i
+                    class="far fa-star"
+                    [ngClass]="{
                       'fas text-yellow-400':
                         starredUserIds.has(user._id) || user.isStarred,
                       'far text-gray-300 hover:text-gray-500':
                         !starredUserIds.has(user._id)
-                    }">
+                    }"
+                  >
                   </i>
                 </button>
               </div>
@@ -356,29 +453,42 @@
     </aside>
 
     <!-- Chat -->
-    <div *ngIf="user2Data" class="col-12 col-md-8 col-lg-9 d-flex flex-column" style="height: 100%">
-      <div class="d-flex align-items-center justify-content-between p-3 border-bottom">
+    <div
+      *ngIf="user2Data"
+      class="col-12 col-md-8 col-lg-9 d-flex flex-column"
+      style="height: 100%"
+    >
+      <div
+        class="d-flex align-items-center justify-content-between p-3 border-bottom"
+      >
         <div class="d-flex align-items-center">
-          <img [src]="user2Data?.image || 'assets/images/default-user.jpg'" class="rounded-circle me-2"
-            style="width: 45px; height: 45px" alt="Chat User" />
+          <img
+            [src]="user2Data?.image || 'assets/images/default-user.jpg'"
+            class="rounded-circle me-2"
+            style="width: 45px; height: 45px"
+            alt="Chat User"
+          />
           <div>
             <div class="fw-bold">
               {{ user2Data?.username || "Select a chat" }}
             </div>
             <div class="small text-muted">
-              <span [ngStyle]="{
+              <span
+                [ngStyle]="{
                   backgroundColor:
                     typingUsers.has(user2Data._id) || user2Data.isOnline
                       ? '#4caf50'
                       : '#ccc'
-                }" class="status-dot">
+                }"
+                class="status-dot"
+              >
               </span>
               {{
-              typingUsers.has(user2Data._id)
-              ? "Typing…"
-              : user2Data.isOnline
-              ? "Online"
-              : "Offline"
+                typingUsers.has(user2Data._id)
+                  ? "Typing…"
+                  : user2Data.isOnline
+                  ? "Online"
+                  : "Offline"
               }}
             </div>
           </div>
@@ -416,20 +526,33 @@
         </div> -->
       </div>
 
-      <div #messageContainer class="flex-grow-1 overflow-auto p-3" style="
+      <div
+        #messageContainer
+        class="flex-grow-1 overflow-auto p-3"
+        style="
           scroll-behavior: smooth;
           background-image: url('assets/images/Untitled-1.png');
           background-size: repeated;
           background-position: center center;
           position: relative;
-        ">
+        "
+      >
         <div *ngFor="let message of privateMessages" class="mb-2">
-          <div #msgElem [attr.data-msg-id]="message._id" style="display: flex" [ngClass]="{
+          <div
+            #msgElem
+            [attr.data-msg-id]="message._id"
+            style="display: flex"
+            [ngClass]="{
               'd-flex justify-content-start':
                 message.senderId !== user1Data._id,
               'd-flex justify-content-end': message.senderId === user1Data._id
-            }">
-            <div [class.rounded-3]="true" [class.shadow-sm]="true" [class.p-2]="true" [ngStyle]="{
+            }"
+          >
+            <div
+              [class.rounded-3]="true"
+              [class.shadow-sm]="true"
+              [class.p-2]="true"
+              [ngStyle]="{
                 'background-color':
                   message.senderId === user1Data._id && theme === 'dark'
                     ? '#177d37'
@@ -441,20 +564,33 @@
                     ? '#ffffff'
                     : '#ffffff',
                 color: theme === 'dark' ? '#FFFFFF' : 'rgba(33, 37, 41, 0.75)',
-              }" style="max-width: 70%">
+              }"
+              style="max-width: 70%"
+            >
               <div style="text-wrap: auto; word-break: break-word">
                 {{ message.text }}
               </div>
               <ng-container *ngIf="message.fileUrl">
                 <div class="mt-2">
-                  <a [href]="message.fileUrl" target="_blank" class="d-inline-block text-decoration-none">
-                    <img *ngIf="message.fileType?.startsWith('image/')" [src]="message.fileUrl" class="img-thumbnail"
-                      style="max-width: 200px; max-height: 200px" />
-                    <div *ngIf="!message.fileType?.startsWith('image/')" class="d-flex align-items-center">
+                  <a
+                    [href]="message.fileUrl"
+                    target="_blank"
+                    class="d-inline-block text-decoration-none"
+                  >
+                    <img
+                      *ngIf="message.fileType?.startsWith('image/')"
+                      [src]="message.fileUrl"
+                      class="img-thumbnail"
+                      style="max-width: 200px; max-height: 200px"
+                    />
+                    <div
+                      *ngIf="!message.fileType?.startsWith('image/')"
+                      class="d-flex align-items-center"
+                    >
                       <i class="fas fa-file me-2 fs-4"></i>
                       <span class="text-break">{{
                         extractFileNameWithoutNumbers(message.fileUrl)
-                        }}</span>
+                      }}</span>
                     </div>
                   </a>
                 </div>
@@ -463,31 +599,49 @@
                 {{ message.timestamp | date : "shortTime" }}
 
                 <span *ngIf="message.senderId === user1Data._id">
-                  <i *ngIf="message.isRead" class="fas fa-check-double text-primary"
-                    style="color: #ebb251 !important"></i>
-                  <i *ngIf="!message.isRead" class="fas fa-check text-secondary"></i>
+                  <i
+                    *ngIf="message.isRead"
+                    class="fas fa-check-double text-primary"
+                    style="color: #ebb251 !important"
+                  ></i>
+                  <i
+                    *ngIf="!message.isRead"
+                    class="fas fa-check text-secondary"
+                  ></i>
                 </span>
               </div>
             </div>
             <div class="text-muted small text-end"></div>
           </div>
         </div>
-        <div *ngIf="isTyping" class="typing-bubble" [ngStyle]="{
+        <div
+          *ngIf="isTyping"
+          class="typing-bubble"
+          [ngStyle]="{
             color: theme === 'dark' ? '#FFFFFF' : 'rgba(33, 37, 41, 0.75)',
             'background-color':
               theme === 'dark' ? 'rgba(33, 37, 41, 0.75)' : '#ebe8e8'
-          }">
+          }"
+        >
           <div>{{ user2Data.username }} is typing</div>
           <div class="typing-dots"><span></span><span></span><span></span></div>
         </div>
       </div>
 
-      <div *ngIf="selectedFile" class="px-3 py-2" style="border-top: 1px solid #ddd; background: #f9f9f9">
+      <div
+        *ngIf="selectedFile"
+        class="px-3 py-2"
+        style="border-top: 1px solid #ddd; background: #f9f9f9"
+      >
         <div class="d-flex align-items-center justify-content-between">
           <div class="d-flex align-items-center gap-2">
             <ng-container>
-              <img [src]="filePreviewUrl" alt="preview" class="img-thumbnail"
-                style="max-width: 100px; max-height: 100px" />
+              <img
+                [src]="filePreviewUrl"
+                alt="preview"
+                class="img-thumbnail"
+                style="max-width: 100px; max-height: 100px"
+              />
             </ng-container>
 
             <ng-container>
@@ -496,25 +650,53 @@
             </ng-container>
           </div>
 
-          <button class="btn btn-sm btn-outline-danger ms-2" (click)="removeSelectedFile()">
+          <button
+            class="btn btn-sm btn-outline-danger ms-2"
+            (click)="removeSelectedFile()"
+          >
             <i class="fas fa-times"></i>
           </button>
         </div>
       </div>
 
-      <form [formGroup]="chatForm" class="border-top p-3 d-flex align-items-center" style="position: relative">
-        <ch-emoji-picker *ngIf="showPicker" [width]="300" [height]="350" [autofocus]="false"
-          [skintoneSetting]="skintoneSetting()" (onEmojiSelected)="handleEmojiSelected($event)"
+      <form
+        [formGroup]="chatForm"
+        class="border-top p-3 d-flex align-items-center"
+        style="position: relative"
+      >
+        <ch-emoji-picker
+          *ngIf="showPicker"
+          [width]="300"
+          [height]="350"
+          [autofocus]="false"
+          [skintoneSetting]="skintoneSetting()"
+          (onEmojiSelected)="handleEmojiSelected($event)"
           (onGlobalSkintoneChanged)="handleGlobalSkintoneChanged($event)"
-          style="position: absolute; bottom: 75px; z-index: 1000"></ch-emoji-picker>
+          style="position: absolute; bottom: 75px; z-index: 1000"
+        ></ch-emoji-picker>
         <input type="file" (change)="onFileSelect($event)" hidden #fileInput />
-        <i class="fas fa-paperclip text-muted me-3" style="cursor: pointer" (click)="fileInput.click()"
-          (change)="onFileSelect($event)"></i>
+        <i
+          class="fas fa-paperclip text-muted me-3"
+          style="cursor: pointer"
+          (click)="fileInput.click()"
+          (change)="onFileSelect($event)"
+        ></i>
 
-        <i class="fas fa-smile text-muted me-3" (click)="showEmoji()" style="cursor: pointer"></i>
+        <i
+          class="fas fa-smile text-muted me-3"
+          (click)="showEmoji()"
+          style="cursor: pointer"
+        ></i>
 
-        <input type="text" class="form-control me-2" placeholder="Type a message" formControlName="text"
-          (keydown)="notifyTyping()" (keyup.enter)="sendMessage()" (keydown.enter)="$event.preventDefault()" />
+        <input
+          type="text"
+          class="form-control me-2"
+          placeholder="Type a message"
+          formControlName="text"
+          (keydown)="notifyTyping()"
+          (keyup.enter)="sendMessage()"
+          (keydown.enter)="$event.preventDefault()"
+        />
 
         <button class="btn" type="button" (click)="sendMessage()">
           <i class="fas fa-paper-plane"></i>
@@ -522,27 +704,40 @@
       </form>
     </div>
 
-    <div *ngIf="!user2Data" style="display: flex"
-      class="col-12 col-md-8 col-lg-9 d-flex flex-column justify-content-center align-items-center text-center">
-      <div style="
+    <div
+      *ngIf="!user2Data"
+      style="display: flex"
+      class="col-12 col-md-8 col-lg-9 d-flex flex-column justify-content-center align-items-center text-center"
+    >
+      <div
+        style="
           display: flex;
           flex-direction: column;
           justify-content: center;
           align-items: center;
-        " [ngStyle]="{
+        "
+        [ngStyle]="{
           height: '100%',
           width: '100%',
           background:
             theme === 'dark'
               ? '#2b3035'
               : 'linear-gradient(to right, #f7f7f7, #e3f2fd)'
-        }">
-        <img src="assets/images/SPOTY CHAT LOGO (2).svg" alt="Welcome" class="img-fluid mb-4"
-          style="max-height: 300px; border-radius: 12px" />
+        }"
+      >
+        <img
+          src="assets/images/SPOTY CHAT LOGO (2).svg"
+          alt="Welcome"
+          class="img-fluid mb-4"
+          style="max-height: 300px; border-radius: 12px"
+        />
 
-        <h2 class="fw-bold mb-2" [ngStyle]="{
+        <h2
+          class="fw-bold mb-2"
+          [ngStyle]="{
             color: theme === 'dark' ? '#95c9db' : '#0077b6'
-          }">
+          }"
+        >
           Welcome to SpottyChat 💬
         </h2>
 
@@ -550,7 +745,10 @@
           Select a user from the left to start chatting in real-time with modern
           features and privacy in mind.
         </p>
-        <button class="btn px-4" style="color: #ffc258; border: 1px solid #ffc258">
+        <button
+          class="btn px-4"
+          style="color: #ffc258; border: 1px solid #ffc258"
+        >
           ✨ Start by selecting a contact ✨
         </button>
       </div>
